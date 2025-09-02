@@ -9,8 +9,15 @@ const MentorSchema = new mongoose.Schema(
     about: { type: String },
 
     languages: [{ type: String }],
-
     fieldsOfWork: [{ type: String }],
+    expertise: [{ type: String }],
+
+    socialLinks: [
+      {
+        platform: { type: String, required: true },
+        url: { type: String, required: true },
+      },
+    ],
 
     education: [
       {
@@ -23,5 +30,4 @@ const MentorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Mentor ||
-  mongoose.model("Mentor", MentorSchema);
+export default mongoose.models.Mentor || mongoose.model("Mentor", MentorSchema);

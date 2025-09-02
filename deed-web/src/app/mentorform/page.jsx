@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-
 import { Checkbox } from "@/components/ui/checkbox";
+import { X } from "lucide-react";
 
 const LANGUAGES = [
   "English",
@@ -20,6 +20,7 @@ const LANGUAGES = [
   "Gujarati",
   "Urdu",
 ];
+
 const FIELDS_OF_WORK = [
   "Software Engineering",
   "Data Science / AI",
@@ -35,6 +36,18 @@ const FIELDS_OF_WORK = [
   "Other",
 ];
 
+// ✅ Predefined social media platforms
+const SOCIAL_MEDIA = [
+  "LinkedIn",
+  "X (Twitter)",
+  "Behance",
+  "Instagram",
+  "Facebook",
+  "GitHub",
+  "YouTube",
+  "Portfolio Website",
+];
+
 export default function MentorEnrollmentForm() {
   const { register, handleSubmit, control, watch, setValue, reset } = useForm({
     defaultValues: {
@@ -47,6 +60,8 @@ export default function MentorEnrollmentForm() {
       fieldsOfWork: [],
       otherField: "",
       education: [{ level: "", subject: "", institution: "" }],
+      socialLinks: [],
+      expertise: [],
     },
   });
 
@@ -54,58 +69,113 @@ export default function MentorEnrollmentForm() {
     control,
     name: "education",
   });
+
+  // ✅ Social Links array
+  const {
+    fields: socialFields,
+    append: appendSocial,
+    remove: removeSocial,
+  } = useFieldArray({
+    control,
+    name: "socialLinks",
+  });
+  const expertise = watch("expertise") || [];
+  const [expertiseInput, setExpertiseInput] = React.useState("");
+
+  // add expertise on Enter or comma
+  const handleExpertiseKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      const newSkill = expertiseInput.trim();
+      if (newSkill && !expertise.includes(newSkill)) {
+        setValue("expertise", [...expertise, newSkill]); // update form
+      }
+      setExpertiseInput("");
+    }
+  };
+
+  // remove expertise chip
+  const removeExpertise = (skill) => {
+    setValue(
+      "expertise",
+      expertise.filter((s) => s !== skill)
+    );
+  };
   const onSubmit = async (data) => {
-    // Agar Other selected hai to uska value fieldsOfWork me add kar do
     if (data.fieldsOfWork.includes("Other") && data.otherField) {
       data.fieldsOfWork = data.fieldsOfWork.filter((f) => f !== "Other");
       data.fieldsOfWork.push(data.otherField);
     }
-  
+
     const res = await fetch("/api/mentors", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-  
+    console.log(data);
+
     const result = await res.json();
     if (res.ok) {
       alert("Mentor registered successfully!");
-      console.log("Saved mentor:", result.mentor);
       reset();
     } else {
       alert(result.error || "Failed to register mentor");
     }
   };
-  
-
-  const selectedLanguages = watch("languages");
-  const selectedFields = watch("fieldsOfWork");
-  const otherField = watch("otherField");
 
   const onToggleArrayValue = (field, value) => {
     const current = new Set(watch(field));
     current.has(value) ? current.delete(value) : current.add(value);
     setValue(field, Array.from(current));
   };
+  const selectedLanguages = watch("languages");
+  const selectedFields = watch("fieldsOfWork");
 
- 
+  // ✅ Local state for new social link
+  const [selectedPlatform, setSelectedPlatform] = React.useState("");
+  const [socialUrl, setSocialUrl] = React.useState("");
 
+  // const handleAddSocial = () => {
+  //   if (!selectedPlatform || !socialUrl) return;
+  //   appendSocial({ platform: selectedPlatform, url: socialUrl });
+  //   setSelectedPlatform("");
+  //   setSocialUrl("");
+  // };
+
+  const handleAddSocial = () => {
+    if (!selectedPlatform || !socialUrl.trim()) {
+      alert("Please select a platform and enter a valid URL");
+      return;
+    }
+
+    // Duplicate check (optional)
+    if (
+      socialFields.some(
+        (s) => s.platform === selectedPlatform && s.url === socialUrl
+      )
+    ) {
+      alert("This link already exists");
+      return;
+    }
+
+    appendSocial({ platform: selectedPlatform, url: socialUrl }); // <-- use appendSocial
+
+    setSelectedPlatform("");
+    setSocialUrl("");
+  };
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
-     <div className="mb-6 bg-muted/40 border rounded-2xl p-4 sm:p-6 shadow-sm">
-  <h1 className="text-2xl font-semibold tracking-tight">
-    Mentor Enrollment
-  </h1>
-  <p className="mt-2 text-sm text-muted-foreground">
-    We would like to know{" "}
-    <span className="font-medium">
-      how you can help students,
-    </span>{" "}
-     please share about your expertise, education, and experience so that
-    students can make better career decisions.
-  </p>
-</div>
-
+      <div className="mb-6 bg-muted/40 border rounded-2xl p-4 sm:p-6 shadow-sm">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Mentor Enrollment
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          We would like to know{" "}
+          <span className="font-medium">how you can help students,</span> please
+          share about your expertise, education, and experience so that students
+          can make better career decisions.
+        </p>
+      </div>
 
       <Card className="rounded-2xl shadow-md">
         <CardHeader>
@@ -113,6 +183,7 @@ export default function MentorEnrollmentForm() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Full Name */}
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
@@ -121,7 +192,6 @@ export default function MentorEnrollmentForm() {
                 {...register("fullName", { required: true })}
               />
             </div>
-
             {/* Dynamic Education Section */}
             <div className="space-y-4">
               <Label>Education</Label>
@@ -209,10 +279,42 @@ export default function MentorEnrollmentForm() {
               <Label htmlFor="about">About / Overview</Label>
               <Textarea
                 id="about"
-              placeholder="About you: describe how you guide, key achievements, focus areas, and areas of expertise."
+                placeholder="About you: describe how you guide, key achievements, focus areas, and areas of expertise."
                 className="min-h-[120px]"
                 {...register("about")}
               />
+            </div>
+            {/* ✅ Expertise Section */}
+            <div className="space-y-2">
+              <Label htmlFor="expertise">Expertise</Label>
+              <div className="flex flex-wrap gap-2 border rounded-xl p-2">
+                {/* Chips */}
+                {expertise.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-1 ring-1 ring-green-700 bg-green-50 text-green-700 px-3 py-1 rounded-lg text-sm"
+                  >
+                    {skill}
+                    <button
+                      type="button"
+                      onClick={() => removeExpertise(skill)}
+                      className="ml-1 text-green-700 hover:text-red-600"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+
+                {/* Input */}
+                <input
+                  type="text"
+                  value={expertiseInput}
+                  onChange={(e) => setExpertiseInput(e.target.value)}
+                  onKeyDown={handleExpertiseKeyDown}
+                  placeholder="Type and press Enter"
+                  className="flex-1 min-w-[120px] outline-none border-none px-2 py-1 text-sm"
+                />
+              </div>
             </div>
 
             <div className="space-y-3">
@@ -261,6 +363,71 @@ export default function MentorEnrollmentForm() {
                     )}
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* ✅ Social Media Links Section */}
+
+            <div className="space-y-3">
+              <Label>Social Media Links</Label>
+
+              {/* Already added links */}
+              <div className="space-y-2">
+                {socialFields.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center border p-2 rounded-lg gap-2"
+                  >
+                    <span className="text-sm font-medium">
+                      {item.platform}:
+                    </span>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      className="text-blue-600 underline text-sm truncate max-w-[200px]"
+                    >
+                      {item.url}
+                    </a>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => removeSocial(index)}
+                      className="self-end sm:self-auto"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add new social link */}
+              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                <select
+                  value={selectedPlatform}
+                  onChange={(e) => setSelectedPlatform(e.target.value)}
+                  className="border rounded-lg px-3 py-[5px] flex-1"
+                >
+                  <option value="">Select Platform</option>
+                  {SOCIAL_MEDIA.map((platform) => (
+                    <option key={platform} value={platform}>
+                      {platform}
+                    </option>
+                  ))}
+                </select>
+                <Input
+                  placeholder="Enter profile URL"
+                  value={socialUrl}
+                  onChange={(e) => setSocialUrl(e.target.value)}
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  onClick={handleAddSocial}
+                  className="rounded-lg bg-green-600 text-white w-full sm:w-auto"
+                >
+                  Add
+                </Button>
               </div>
             </div>
 
