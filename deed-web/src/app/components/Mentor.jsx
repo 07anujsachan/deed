@@ -187,21 +187,21 @@ export default function MentorSection() {
       {/* Filters */}
       <div
         ref={filterScrollRef}
-        className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x"
+        className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x items-center"
       >
         {/* All filter - Always active */}
         <button
           disabled
-          className="px-4 py-2 rounded-full border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start"
+          className="px-4 py-2 rounded-xl border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start"
         >
           See all filters
         </button>
-
+        <div className="w-[2px] h-9  bg-gray-900"></div>
         {allFilters.map((filter, i) => (
           <button
             key={i}
             onClick={() => toggleFilter(filter)}
-            className={`px-4 py-2 rounded-full border shrink-0 snap-start flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl border shrink-0 snap-start flex items-center gap-2 ${
               activeFilters.includes(filter)
                 ? "text-green-700 border-green-500 font-semibold"
                 : "text-gray-800 border-gray-300"

@@ -184,16 +184,16 @@ export default function Home({ setTheme }) {
           <h4 className="text-default text-2xl font-semibold uppercase">
             Careers Archive
           </h4>
-          <h2 className="text-default text-[50px] font-semibold my-4 ">
+          <h2 className="text-default md:text-[50px] text-4xl font-semibold my-4 ">
             {" "}
             A Collection of Career options
           </h2>
-          <p className="text-default text-2xl font-medium w-[52%] mx-auto ">
+          <p className="text-default md:text-2xl text-xl font-medium md:w-[52%] mx-auto ">
             Read about the career options and the most important details to make
             a well informed decision for your future
           </p>
         </div>
-        <div className="flex justify-around flex-wrap my-12">
+        <div className="flex  justify-around flex-wrap my-12 gap-4">
           <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center  ">
             <p className="text-2xl font-semibold text-default">Design</p>
           </div>

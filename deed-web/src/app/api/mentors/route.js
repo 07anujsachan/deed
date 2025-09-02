@@ -5,8 +5,12 @@ export async function POST(req) {
   try {
     await dbConnect();
     const body = await req.json();
-
-    const mentor = new Mentor(body);
+    console.log("Incoming Body:", body);
+    console.log("Social Media:", body.socialLinks);
+    const mentor = new Mentor({
+      ...body,
+      socialLinks: body.socialLinks,
+    });
     await mentor.save();
 
     return Response.json(

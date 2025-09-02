@@ -17,10 +17,10 @@ export default function Sidebar() {
     <aside
       className="
         bg-white border-t md:border-r 
-        md:w-44 md:min-h-screen 
+        md:w-40 md:min-h-screen 
         flex md:flex-col 
-        items-center justify-between
-        py-2 md:py-6
+        items-center justify-between p-1 md:p-0
+        md:py-6
         fixed bottom-0 md:static w-full 
         z-50
       "
@@ -34,12 +34,20 @@ export default function Sidebar() {
         {links.map((link) => {
           const isActive = pathname === link.path;
           return (
-            <Link key={link.path} href={link.path} className="w-full">
+            <Link
+              key={link.path}
+              href={link.path}
+              className={`w-full ${
+                isActive
+                  ? " text-green-600 font-semibold  border-r-4  border-green-600 "
+                  : "hover:bg-gray-100"
+              }`}
+            >
               <div
                 className={`flex flex-col items-center justify-center gap-1 px-3 w-[80%] mx-auto py-3 rounded-xl cursor-pointer
                   ${
                     isActive
-                      ? "bg-green-100 text-green-600 font-semibold  border-b-2 border-green-600 "
+                      ? "bg-green-100 text-green-600 font-semibold "
                       : "hover:bg-gray-100"
                   }
                 `}
