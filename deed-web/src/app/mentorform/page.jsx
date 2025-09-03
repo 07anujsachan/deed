@@ -62,6 +62,7 @@ export default function MentorEnrollmentForm() {
       education: [{ level: "", subject: "", institution: "" }],
       socialLinks: [],
       expertise: [],
+      photo: null,
     },
   });
 
@@ -106,7 +107,22 @@ export default function MentorEnrollmentForm() {
       data.fieldsOfWork = data.fieldsOfWork.filter((f) => f !== "Other");
       data.fieldsOfWork.push(data.otherField);
     }
-
+    const photoFile = data.photo?.[0] || null;
+    if (photoFile) {
+      console.log("Uploaded file:", photoFile);
+      // Yaha API / Cloudinary upload kar sakte ho
+    }
+  
+    // Agar photo backend ke sath bhejna hai to FormData use karna hoga
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (key === "photo") {
+        if (photoFile) formData.append("photo", photoFile);
+      } else {
+        formData.append(key, JSON.stringify(data[key]));
+      }
+    });
+  
     const res = await fetch("/api/mentors", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -248,6 +264,7 @@ export default function MentorEnrollmentForm() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* profession */}
               <div className="space-y-2">
                 <Label htmlFor="profession">Profession</Label>
                 <Input
@@ -256,6 +273,7 @@ export default function MentorEnrollmentForm() {
                   {...register("profession")}
                 />
               </div>
+              {/* Work experience */}
               <div className="space-y-2">
                 <Label htmlFor="workExperience">Work Experience</Label>
                 <Input
@@ -265,7 +283,7 @@ export default function MentorEnrollmentForm() {
                 />
               </div>
             </div>
-
+            {/* currently working */}
             <div className="space-y-2">
               <Label htmlFor="currentlyWorkingIn">Currently Working In</Label>
               <Input
@@ -274,7 +292,7 @@ export default function MentorEnrollmentForm() {
                 {...register("currentlyWorkingIn")}
               />
             </div>
-
+            {/* About  */}
             <div className="space-y-2">
               <Label htmlFor="about">About / Overview</Label>
               <Textarea
@@ -316,7 +334,7 @@ export default function MentorEnrollmentForm() {
                 />
               </div>
             </div>
-
+            {/* language */}
             <div className="space-y-3">
               <Label>Language/s</Label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -337,7 +355,7 @@ export default function MentorEnrollmentForm() {
                 ))}
               </div>
             </div>
-
+            {/* fields of work */}
             <div className="space-y-3">
               <Label>Fields of work</Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -430,18 +448,33 @@ export default function MentorEnrollmentForm() {
                 </Button>
               </div>
             </div>
-
+            {/* Profile Photo Upload */}
+            <div className="space-y-2">
+              <Label htmlFor="photo">Profile Photo</Label>
+              <Input
+                id="photo"
+                type="file"
+                accept="image/*"
+                {...register("photo")}
+              />
+              <p className="text-xs text-muted-foreground text-red-500">
+                *Please upload a{" "}
+                <span className="font-medium">professional photo</span>
+                (formal attire, clear face, plain background preferred).
+              </p>
+            </div>
+            {/* submit form button */}
             <div className="pt-2 flex items-center gap-3">
               <Button
                 type="submit"
-                className="rounded-xl px-6 bg-green-100 border border-green-600 hover:bg-green-700 text-green-600 hover:text-white"
+                className="rounded-xl px-6 hover:bg-green-100 border border-green-600 bg-white text-green-600 "
               >
                 Submit
               </Button>
               <Button
                 type="button"
                 variant="secondary"
-                className="rounded-2xl"
+                className="rounded-xl hover:bg-red-100 ring-1 ring-red-500 ring-inset text-red-500"
                 onClick={() => reset()}
               >
                 Reset
