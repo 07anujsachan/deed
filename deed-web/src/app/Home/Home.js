@@ -7,75 +7,7 @@ import { Button } from "../components/UIComponents/PrimarySmallButton";
 
 import { ChevronLeft, ChevronRight, ArrowRight, Search, X } from "lucide-react";
 import MentorSection from "../components/Mentor";
-
-const mentors = [
-  {
-    imageUrl: "/media/Anuj.jpg",
-    name: "Anurag Sachan",
-    title: "UI/UX",
-    tags: ["Design", "UX"],
-    education: [
-      {
-        degree: "Masters in design (M.Des.)",
-        institute: "National Institute of Design,\nBangalore",
-      },
-      {
-        degree: "Bachelor of Fine Art (BFA)",
-        institute: "College of Art, Delhi\nUniversity, New Delhi",
-      },
-    ],
-  },
-  {
-    imageUrl: "/media/Anuj.jpg",
-    name: "Anurag Sachan",
-    title: "UI/UX",
-    tags: ["Design", "UX"],
-    education: [
-      {
-        degree: "Masters in design (M.Des.)",
-        institute: "National Institute of Design,\nBangalore",
-      },
-      {
-        degree: "Bachelor of Fine Art (BFA)",
-        institute: "College of Art, Delhi\nUniversity, New Delhi",
-      },
-    ],
-  },
-
-  {
-    imageUrl: "/media/Anuj.jpg",
-    name: "Anurag Sachan",
-    title: "UI/UX",
-    tags: ["Design", "UX"],
-    education: [
-      {
-        degree: "Masters in design (M.Des.)",
-        institute: "National Institute of Design,\nBangalore",
-      },
-      {
-        degree: "Bachelor of Fine Art (BFA)",
-        institute: "College of Art, Delhi\nUniversity, New Delhi",
-      },
-    ],
-  },
-
-  {
-    imageUrl: "/media/Anuj.jpg",
-    name: "Anurag Sachan",
-    title: "UI/UX",
-    tags: ["Design", "UX"],
-    education: [
-      {
-        degree: "Masters in design (M.Des.)",
-        institute: "National Institute of Design,\nBangalore",
-      },
-      {
-        degree: "Bachelor of Fine Art (BFA)",
-        institute: "College of Art, Delhi\nUniversity, New Delhi",
-      },
-    ],
-  },
-];
+import CareerOption from "../components/CareerOption";
 
 export default function Home({ setTheme }) {
   const scrollRef = useRef(null);
@@ -154,7 +86,7 @@ export default function Home({ setTheme }) {
 
       <MentorSection />
       {/* option section */}
-      <div className="bg-[url('/media/carreroptionbg.png')] bg-cover bg-no-repeat w-full py-32 mt-12">
+      <div className="bg-[url('/media/carreroptionbg.png')] bg-cover bg-no-repeat w-full py-36 mt-12">
         <div className="mx-auto   my-10 md:w-[47%] flex flex-col justify-center items-center">
           <p className="text-xl  text-center font-semibold">
             Careers Assessment test
@@ -179,70 +111,8 @@ export default function Home({ setTheme }) {
         </div>
       </div>
       {/* career options */}
-      <div className="py-32">
-        <div className="text-center">
-          <h4 className="text-default text-2xl font-semibold uppercase">
-            Careers Archive
-          </h4>
-          <h2 className="text-default md:text-[50px] text-4xl font-semibold my-4 ">
-            {" "}
-            A Collection of Career options
-          </h2>
-          <p className="text-default md:text-2xl text-xl font-medium md:w-[52%] mx-auto ">
-            Read about the career options and the most important details to make
-            a well informed decision for your future
-          </p>
-        </div>
-        <div className="flex  justify-around flex-wrap my-12 gap-4">
-          <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center  ">
-            <p className="text-2xl font-semibold text-default">Design</p>
-          </div>
-          <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center ">
-            <p className="text-2xl font-semibold text-default">Technology</p>
-          </div>
-          <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center ">
-            <p className="text-2xl font-semibold text-default">Aviation</p>
-          </div>
-          <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center ">
-            <p className="text-2xl font-semibold text-default">Medical</p>
-          </div>
-          <div className="bg-white w-56 h-56 rounded-3xl flex justify-center items-center ">
-            <p className="text-2xl font-semibold text-default">Teaching</p>
-          </div>
-        </div>
-        <div className=" flex justify-center items-center flex-col">
-          <button
-            className={`px-6 py-2 rounded-lg shadow-md text-white md:text-2xl text-md font-semibold  ${
-              activeLink === "find" ? "bg-[#0050AE]" : "bg-[#1B752A]"
-            }`}
-          >
-            {" "}
-            Check all the career options
-          </button>
-        </div>
-        <div className=" mt-8 flex justify-between items-center">
-          <button
-            onClick={() => scroll("left")}
-            className="  p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold"
-          >
-            <ChevronLeft size={24} />
-          </button>
-
-          <div>
-            <Button
-              text="See All Mentors"
-              variant="PrimarySmallOutlinedButton"
-              onClick={() => alert("Saved")}
-              className="ml-6 "
-            />
-          </div>
-          <button
-            onClick={() => scroll("right")}
-            className="  p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold"
-          >
-            <ChevronRight size={24} />
-          </button>
-        </div>
+      <div className="my-20">
+        <CareerOption />
       </div>
 
       {/* career guide section */}

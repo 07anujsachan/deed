@@ -10,17 +10,19 @@ const Header = () => {
     <header className="w-full px-4 md:px-16 py-4 flex items-center justify-between bg-white shadow-sm relative z-50">
       {/* Logo Section */}
       <div className="flex items-center gap-3">
-        <img
-          src="/media/logo.png"
-          alt="Deed Logo"
-          className="w-10 h-10 rounded-xl bg-[#f3f3f3] p-1"
-        />
-        {/* Hide text on small screens */}
-        <div className="hidden sm:block">
-          <h1 className="font-semibold text-xl text-[#111827] ">Deed</h1>
-          <p className="text-sm text-gray-500 -mt-1">Decide your education</p>
-        </div>
-      </div>
+  <Link href="/" className="flex items-center gap-3">
+    <img
+      src="/media/logo.png"
+      alt="Deed Logo"
+      className="w-10 h-10 rounded-xl bg-[#f3f3f3] p-1"
+    />
+    {/* Hide text on small screens */}
+    <div className="hidden sm:block">
+      <h1 className="font-semibold text-xl text-[#111827] ">Deed</h1>
+      <p className="text-sm text-gray-500 -mt-1">Decide your education</p>
+    </div>
+  </Link>
+</div>
       <div className="flex gap-6">
         {/* Desktop Nav Links */}
         <nav className="hidden md:flex gap-10 items-center font-medium text-[#111827]">

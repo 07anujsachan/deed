@@ -39,7 +39,7 @@ export default function Sidebar() {
               href={link.path}
               className={`w-full ${
                 isActive
-                  ? " text-green-600 font-semibold  border-r-4  border-green-600 "
+                  ? " text-green-600 font-semibold  md:border-r-4   border-green-600 "
                   : "hover:bg-gray-100"
               }`}
             >
