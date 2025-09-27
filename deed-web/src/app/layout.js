@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
               {/* ✅ Main content */}
               <main
                 className="
-                  flex-1 px-6 pt-6 bg-gray-50 overflow-y-auto
+                  flex-1  pt-6 bg-gray-50 overflow-y-auto
                   md:ml-[160px] md:pb-0
                   pb-16  /* leave space for mobile bottom nav */
                 "

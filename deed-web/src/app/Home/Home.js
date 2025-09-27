@@ -29,7 +29,7 @@ export default function Home({ setTheme }) {
 
   return (
     <div className="">
-      <section className=" text-center mt-6 md:mt-12">
+      <section className=" text-center mt-6 md:mt-12 px-6">
         <h1 className="text-4xl md:text-[80px] font-semibold leading-snug text-gray-900">
           <span className="">Get real life help about</span> <br />
           <span className="">Career options</span>
