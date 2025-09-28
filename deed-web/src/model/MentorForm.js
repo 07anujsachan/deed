@@ -7,7 +7,7 @@ const MentorSchema = new mongoose.Schema(
     workExperience: { type: String },
     currentlyWorkingIn: { type: String },
     about: { type: String },
-
+    photo: { type: String },
     languages: [{ type: String }],
     fieldsOfWork: [{ type: String }],
     expertise: [{ type: String }],

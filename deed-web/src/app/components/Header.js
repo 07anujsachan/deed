@@ -47,7 +47,7 @@ const Header = () => {
             </span>
           </Link>
           <Link
-            href="/mentorform"
+            href="/mentorsignup"
             className="border-2 border-blue-600 text-[#3063DA] hover:bg-blue-50 font-semibold px-5 py-2 rounded-lg text-lg"
           >
             Join as an expert
