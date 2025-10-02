@@ -22,13 +22,13 @@ const socialIcons = [Twitter, Instagram];
 const options = ["General query", "Career", "Other"];
 export default function ContactPage() {
   return (
-    <div className='mx-36 '>
+    <div className='max-w-[80%] mx-auto'>
       <h2 className='text-[40px] text-center font-bold mt-8'>Contact Us</h2>
       <p className='text-gray-600 text-lg text-center'>
         Any question or remarks? Just write us a message!
       </p>
       {/* box for form */}
-      <div className='bg-primaryBg flex gap-10 w-full h-auto mx-auto mb-20 mt-12 p-2 rounded-lg'>
+      <div className='bg-white border-2 border-secondaryButtonBg flex gap-10 mb-20 mt-12 p-2 rounded-lg'>
         <aside className='bg-secondaryBg basis-[40%] rounded-lg p-10'>
           <h3 className='text-3xl font-bold mb-2'>Contact Information</h3>
           <p className='text-lg text-gray-500'>Say something to start chat!</p>
@@ -52,7 +52,7 @@ export default function ContactPage() {
             ))}
           </div>
         </aside>
-        <div className='basis-[60%]'>
+        <div className='basis-[60%] relative'>
           <form action='' className='mt-12 mr-12'>
             {/* first name and last name fields  */}
             <div className='flex w-full gap-9'>
@@ -131,13 +131,13 @@ export default function ContactPage() {
               variant={"PrimarySmallButton"}
               text={"Submit"}
               type='submit'
-              className='float-right px-10'
+              className='float-right box-border z-50'
             />
           </form>
           <img
             src='/media/paperPlane.png'
             alt='image'
-            className='float-right relative -bottom-5 -right-20'
+            className='absolute w-36 h-36 -bottom-10 right-20 z-10'
           />
         </div>
       </div>
