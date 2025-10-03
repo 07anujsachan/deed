@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, X } from "lucide-react";
 import { useRegisterMentorMutation } from "@/features/mentor/mentorApiSlice";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const LANGUAGES = [
   "English",
@@ -51,7 +51,6 @@ const SOCIAL_MEDIA = [
 ];
 
 export default function MentorEnrollmentForm() {
-  const router = useRouter();
   const { register, handleSubmit, control, watch, setValue, reset } = useForm({
     defaultValues: {
       fullName: "",
@@ -75,6 +74,7 @@ export default function MentorEnrollmentForm() {
     control,
     name: "education",
   });
+  const router = useRouter();
 
   // ✅ Social Links array
   const {

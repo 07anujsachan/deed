@@ -13,6 +13,10 @@ export const mentorApiSlice = createApi({
       query: () => "/mentors",
       providesTags: ["Mentor"],
     }),
+    //fetch mentor detail
+    getMentorDetail: builder.query({
+      query: () => `/mentors/me`,
+    }),
     // fetch single mentor
     getSingleMentor: builder.query({
       query: (id) => `/mentors/${id}`,
@@ -57,6 +61,7 @@ export const mentorApiSlice = createApi({
 // Export hooks for usage in components
 export const {
   useGetMentorsQuery,
+  useGetMentorDetailQuery,
   useGetSingleMentorQuery,
   useRegisterMentorMutation,
   useSendOtpMutation,
