@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { useRegisterMentorMutation } from "@/features/mentor/mentorApiSlice";
+import { useRouter } from "next/navigation";
 
 const LANGUAGES = [
   "English",
@@ -65,11 +67,14 @@ export default function MentorEnrollmentForm() {
       photo: null,
     },
   });
+  const [registerMentor, { isLoading, isError, error }] =
+    useRegisterMentorMutation();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "education",
   });
+  const router = useRouter();
 
   // ✅ Social Links array
   const {
@@ -121,19 +126,14 @@ export default function MentorEnrollmentForm() {
       }
     });
 
-    const res = await fetch("/api/mentors", {
-      method: "POST",
-      body: formData, // ✅ send formData directly
-      // ❌ don't set Content-Type manually, browser sets multipart/form-data
-    });
+    const res = await registerMentor(formData);
 
-    const result = await res.json();
-    if (res.ok) {
+    if (res?.data?.success) {
       alert("Mentor registered successfully!");
-      navigate("/mentordetail");
+      router.push("/mentordetail");
       reset();
     } else {
-      alert(result.error || "Failed to register mentor");
+      alert("Failed to register mentor");
     }
   };
 
@@ -468,7 +468,7 @@ export default function MentorEnrollmentForm() {
                 type='submit'
                 className='rounded-xl px-6 hover:bg-green-100 border border-green-600 bg-white text-green-600 '
               >
-                Submit
+                {isLoading ? <Loader2 className='animate-spin' /> : "Submit"}
               </Button>
               <Button
                 type='button'
