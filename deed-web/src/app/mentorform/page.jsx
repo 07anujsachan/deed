@@ -108,6 +108,7 @@ export default function MentorEnrollmentForm() {
     );
   };
   const onSubmit = async (data) => {
+    // Handle "Other" case
     if (data.fieldsOfWork.includes("Other") && data.otherField) {
       data.fieldsOfWork = data.fieldsOfWork.filter((f) => f !== "Other");
       data.fieldsOfWork.push(data.otherField);
@@ -115,14 +116,21 @@ export default function MentorEnrollmentForm() {
 
     const photoFile = data.photo?.[0] || null;
 
-    // Use FormData for sending file + other fields
     const formData = new FormData();
+
     Object.keys(data).forEach((key) => {
       if (key === "photo") {
         if (photoFile) formData.append("photo", photoFile);
       } else {
-        // Non-file fields
-        formData.append(key, JSON.stringify(data[key]));
+        const value = data[key];
+
+        // ✅ If array or object → stringify
+        if (Array.isArray(value) || typeof value === "object") {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          // ✅ If string/number → append directly
+          formData.append(key, value);
+        }
       }
     });
 
@@ -462,6 +470,9 @@ export default function MentorEnrollmentForm() {
                 (formal attire, clear face, plain background preferred).
               </p>
             </div>
+            {isError && (
+              <p className='text-xs text-red-500'>{error?.data?.message}</p>
+            )}
             {/* submit form button */}
             <div className='pt-2 flex items-center gap-3'>
               <Button
