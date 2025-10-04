@@ -1,10 +1,10 @@
 "use client";
 import { useGetSingleMentorQuery } from "@/features/mentor/mentorApiSlice";
 import { CalendarClock, Headphones } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 export default function MentorDetailPage({ params }) {
-  const { mentorId } = params;
+  const { mentorId } = React.use(params);
   console.log(mentorId);
   const { data, isLoading, isError } = useGetSingleMentorQuery(mentorId);
   const [activeTab, setActiveTab] = useState("Overview"); // default tab
@@ -32,11 +32,12 @@ export default function MentorDetailPage({ params }) {
 
             <div className='flex justify-between w-full items-center'>
               <div className='flex-1 '>
-                <h1 className='text-2xl font-bold text-gray-900'>
-                  Anurag Sachan
+                <h1 className='text-2xl font-bold text-gray-900 capitalize'>
+                  {mentor?.fullName}
                 </h1>
                 <p className='text-lg text-gray-700'>
-                  UI Designer at Tata Digital
+                  {/* UI Designer at Tata Digital */}
+                  {mentor?.profession}
                 </p>
               </div>
 
@@ -76,13 +77,14 @@ export default function MentorDetailPage({ params }) {
                 {/* About */}
                 <div>
                   <p className='text-gray-800 leading-relaxed text-sm'>
-                    Hi, I am Kingsley. I am passionate about helping companies
+                    {mentor?.about}
+                    {/* Hi, I am Kingsley. I am passionate about helping companies
                     enhance their design experiences, refine their ideas and
                     launch impactful solutions. In the past, I have helped
                     companies with millions of customers grow their businesses,
                     and improve and create products by identifying product and
                     user experience problems and opportunities, conceptualizing,
-                    prototyping, and working with developers (handoff).
+                    prototyping, and working with developers (handoff). */}
                   </p>
                   <p className='text-gray-800 leading-relaxed text-sm mt-3'>
                     I like to be involved in different stages of a digital
@@ -113,16 +115,26 @@ export default function MentorDetailPage({ params }) {
                   </h2>
                   <ul className='space-y-1 text-sm text-gray-700'>
                     <li>
-                      <span className='font-medium'>Expertise:</span> UI/UX
-                      Design, Product Strategy
+                      <span className='font-medium mr-1 '>Expertise:</span>
+                      {mentor?.expertise.map((tag, index) => (
+                        <span key={index} className='capitalize'>
+                          {tag}
+                          {index !== mentor?.expertise.length - 1 && ","}{" "}
+                        </span>
+                      ))}
                     </li>
                     <li>
                       <span className='font-medium'>Disciplines:</span>{" "}
                       Interaction Design, Visual Design
                     </li>
                     <li>
-                      <span className='font-medium'>Language:</span> English,
-                      Hindi
+                      <span className='font-medium'>Language:</span>{" "}
+                      {mentor?.languages.map((language, index) => (
+                        <span key={index} className='capitalize'>
+                          {language}
+                          {index !== mentor?.languages.length - 1 && ","}{" "}
+                        </span>
+                      ))}
                     </li>
                   </ul>
                 </div>
@@ -133,11 +145,11 @@ export default function MentorDetailPage({ params }) {
                     Experience
                   </h2>
                   <p className='text-sm text-gray-700'>
-                    5+ years in UI/UX Design
+                    {mentor?.workExperience}
                   </p>
                 </div>
                 {/* Experties */}
-                <div>
+                {/* <div>
                   <h2 className='text-sm font-semibold text-gray-900 mb-2'>
                     Expertise
                   </h2>
@@ -155,16 +167,30 @@ export default function MentorDetailPage({ params }) {
                       Hindi
                     </li>
                   </ul>
-                </div>
+                </div> */}
 
                 {/* Education */}
+
                 <div>
                   <h2 className='text-sm font-semibold text-gray-900 mb-2'>
                     Education
                   </h2>
-                  <p className='text-sm text-gray-700'>
-                    B.Tech in Computer Science, Certification in UI/UX
-                  </p>
+
+                  {mentor?.education?.length > 0 ? (
+                    mentor.education.map((edu, index) => (
+                      <p key={index} className='text-sm text-gray-700'>
+                        {edu.level
+                          ? `${edu.level[0].toUpperCase()}${edu.level.slice(1)}`
+                          : "Education"}
+                        {edu.subject ? ` in ${edu.subject}` : ""},
+                        {edu.institution ? ` ${edu.institution}` : ""}
+                      </p>
+                    ))
+                  ) : (
+                    <p className='text-sm text-gray-500 italic'>
+                      No education details provided
+                    </p>
+                  )}
                 </div>
               </>
             )}

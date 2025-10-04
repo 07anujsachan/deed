@@ -28,43 +28,43 @@ export default function Home({ setTheme }) {
   const dispatch = useDispatch();
 
   return (
-    <div className="">
-      <section className=" text-center mt-6 md:mt-12 px-6">
-        <h1 className="text-4xl md:text-[80px] font-semibold leading-snug text-gray-900">
-          <span className="">Get real life help about</span> <br />
-          <span className="">Career options</span>
+    <div className=''>
+      <section className=' text-center mt-6 md:mt-12 px-6'>
+        <h1 className='text-4xl md:text-[80px] font-semibold leading-snug text-gray-900'>
+          <span className=''>Get real life help about</span> <br />
+          <span className=''>Career options</span>
         </h1>
 
-        <p className="mt-4 text-gray-600 mx-auto">
+        <p className='mt-4 text-gray-600 mx-auto'>
           Find the best career choice by accessing to the perspectives and life
           experiences of <br /> others
-          <span className="font-semibold italic">
+          <span className='font-semibold italic'>
             who’ve been there, done that.
           </span>
         </p>
 
         {/* Search Bar */}
-        <div className="flex justify-center md:mt-20 mt-12 mx-auto">
-          <div className="flex items-center gap-2 md:w-[70%]  ">
+        <div className='flex justify-center md:mt-20 mt-12 mx-auto'>
+          <div className='flex items-center gap-2 md:w-[70%]  '>
             {/* Input wrapper */}
-            <div className="flex items-center border border-gray-300 rounded-lg flex-grow px-3 py-2 bg-white">
+            <div className='flex items-center border border-gray-300 rounded-lg flex-grow px-3 py-2 bg-white'>
               {/* Left Search Icon */}
-              <Search size={18} className="text-gray-500 mr-2" />
+              <Search size={18} className='text-gray-500 mr-2' />
 
               {/* Input */}
               <input
-                type="text"
+                type='text'
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Keyword"
-                className="flex-grow text-gray-700 outline-none"
+                placeholder='Keyword'
+                className='flex-grow text-gray-700 outline-none'
               />
 
               {/* Clear Button (Cross) */}
               {query && (
                 <button
                   onClick={() => setQuery("")}
-                  className="text-gray-500 ring-1 p-[2px] ring-gray-500 rounded-full"
+                  className='text-gray-500 ring-1 p-[2px] ring-gray-500 rounded-full'
                 >
                   <X size={12} />
                 </button>
@@ -72,46 +72,46 @@ export default function Home({ setTheme }) {
             </div>
 
             {/* Search Button */}
-            <button className=" rounded-xl ring-inset ring-2 ring-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] px-5 py-2  transition flex items-center gap-2">
+            <button className=' rounded-xl ring-inset ring-2 ring-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] px-5 py-2  transition flex items-center gap-2'>
               Search{" "}
-              <span className="text-lg">
+              <span className='text-lg'>
                 <ArrowRight size={18} />
               </span>
             </button>
           </div>
         </div>
-        <img src="/media/stats.png" alt="" className="w-full mt-20" />
+        <img src='/media/stats.png' alt='' className='w-full mt-20' />
       </section>
       {/* mentor  */}
 
-      <MentorSection />
+      <MentorSection page='home' />
       {/* option section */}
       <div className="bg-[url('/media/carreroptionbg.png')] bg-cover bg-no-repeat w-full py-36 mt-12">
-        <div className="mx-auto   my-10 md:w-[47%] flex flex-col justify-center items-center">
-          <p className="text-xl  text-center font-semibold">
+        <div className='mx-auto   my-10 md:w-[47%] flex flex-col justify-center items-center'>
+          <p className='text-xl  text-center font-semibold'>
             Careers Assessment test
           </p>
-          <h3 className="text-4xl md:text-5xl my-6 font-semibold leading-snug text-gray-900 w-[90%] text-center">
+          <h3 className='text-4xl md:text-5xl my-6 font-semibold leading-snug text-gray-900 w-[90%] text-center'>
             Career Options for You
           </h3>
-          <p className="mx-auto text-center text-xl font-semibold text-default ">
+          <p className='mx-auto text-center text-xl font-semibold text-default '>
             A test where you don’t have to worry about marks!
           </p>
-          <p className="mx-auto text-center text-lg font-regular text-default ">
+          <p className='mx-auto text-center text-lg font-regular text-default '>
             Go through a simple 10 mins assessment test to analyse your
             preferences and get some suggested career options
           </p>
 
           <Button
-            text="Go to the Career Assessment Test"
-            variant="PrimarySmallOutlinedButton"
+            text='Go to the Career Assessment Test'
+            variant='PrimarySmallOutlinedButton'
             onClick={() => alert("Saved")}
-            className="mt-6  md:text-xl text-sm "
+            className='mt-6  md:text-xl text-sm '
           />
         </div>
       </div>
       {/* career options */}
-      <div className="my-20">
+      <div className='my-20'>
         <CareerOption />
       </div>
 
