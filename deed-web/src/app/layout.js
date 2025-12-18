@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import ReduxProvider from "./components/ReduxProvider";
 import Header from "./components/Header";
 import SideNavbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,41 +23,44 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
-        <link rel="shortcut icon" href="./media/logo.png" />
+        <link rel='shortcut icon' href='./media/logo.png' />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReduxProvider>
-          <div className="flex flex-col min-h-screen">
+          <div className='flex flex-col min-h-screen'>
             {/* ✅ Header (always fixed top) */}
-            <div className="fixed top-0 left-0 right-0 z-50">
+            <div className='fixed top-0 left-0 right-0 z-50'>
               <Header />
             </div>
 
-            <div className="flex flex-1 pt-16">
+            <div className='flex flex-1 pt-16'>
               {/* ✅ Sidebar (desktop) */}
-              <div className="hidden md:block fixed top-16 left-0 h-[calc(100vh-4rem)] w-60 z-40">
+              <div className='hidden md:block fixed top-16 left-0 h-[calc(100vh-4rem)] w-60 z-40'>
                 <SideNavbar />
               </div>
 
               {/* ✅ Main content */}
               <main
-                className="
+                className='
                   flex-1  pt-6 bg-gray-50 overflow-y-auto
                   md:ml-[160px] md:pb-0
                   pb-16  /* leave space for mobile bottom nav */
-                "
+                '
               >
                 {children}
               </main>
             </div>
 
             {/* ✅ Bottom nav (mobile only) */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+            <div className='md:hidden fixed bottom-0 left-0 right-0 z-50'>
               <SideNavbar />
+            </div>
+            <div className='md:block hidden'>
+              <Footer />
             </div>
           </div>
         </ReduxProvider>
