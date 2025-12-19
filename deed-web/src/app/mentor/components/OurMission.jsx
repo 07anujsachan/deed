@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import { OurMissionCard } from "./UIComponents/OurMissionCard";
-import ArrowButton from "./UIComponents/ArrowButton";
-import { sectionVariants } from "./UIComponents/motionVariants";
 import { motion } from "framer-motion";
+import { sectionVariants } from "@/app/components/UIComponents/motionVariants";
+import { MentorCard } from "./OurMissionCard";
+import ArrowButton from "@/components/ui/ArrowButton";
 
 const OurMission = ({ teamData }) => {
   const scrollRef = useRef(null);
@@ -47,7 +47,7 @@ const OurMission = ({ teamData }) => {
         className='flex gap-4 md:gap-8 overflow-x-auto scroll-smooth scrollbar-hide'
       >
         {teamData.map((item, index) => (
-          <OurMissionCard key={index} {...item} />
+          <MentorCard key={index} {...item} />
         ))}
       </div>
       <div className='flex gap-8 justify-center mt-8'>

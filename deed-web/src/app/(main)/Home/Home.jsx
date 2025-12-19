@@ -3,11 +3,11 @@
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button } from "../components/UIComponents/PrimarySmallButton";
+import { Button } from "../../../components/ui/PrimarySmallButton";
 
 import { ChevronLeft, ChevronRight, ArrowRight, Search, X } from "lucide-react";
-import MentorSection from "../components/Mentor";
-import CareerOption from "../components/CareerOption";
+import MentorSection from "../../components/Mentor";
+import CareerOption from "../../components/CareerOption";
 
 export default function Home({ setTheme }) {
   const scrollRef = useRef(null);

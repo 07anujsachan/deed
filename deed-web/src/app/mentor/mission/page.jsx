@@ -1,12 +1,13 @@
 "use client";
 import React, { useRef } from "react";
-import { Button } from "../components/UIComponents/PrimarySmallButton";
+import { Button } from "../../../components/ui/PrimarySmallButton";
 import OurMission from "../components/OurMission";
-import { OurMissionCard } from "../components/UIComponents/OurMissionCard";
-import ArrowButton from "../components/UIComponents/ArrowButton";
+import ArrowButton from "../../../components/ui/ArrowButton";
 import FAQSection from "../components/FaqSection";
-import { sectionVariants } from "../components/UIComponents/motionVariants";
+
 import { motion } from "framer-motion";
+import { sectionVariants } from "@/app/components/UIComponents/motionVariants";
+import { MentorCard } from "../components/OurMissionCard";
 const teamData = [
   {
     name: "Robert Fox",
@@ -127,6 +128,7 @@ const page = () => {
             text={"Get Started"}
             type='button'
             variant={"SecondarySmallButton"}
+            href={"/mentor/guidelines"}
           />
           <img
             loading='lazy'
@@ -169,7 +171,7 @@ const page = () => {
           className='flex gap-4 md:gap-8 overflow-x-auto scroll-smooth scrollbar-hide'
         >
           {careerGuideData.map((item, index) => (
-            <OurMissionCard key={index} {...item} />
+            <MentorCard key={index} {...item} />
           ))}
         </div>
         <div className='flex gap-8 justify-center mt-8'>

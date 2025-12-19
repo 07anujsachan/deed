@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
-import { Button } from "../components/UIComponents/PrimarySmallButton";
-import MentorCard from "../components/UIComponents/Mentorcard";
+import { Button } from "../../components/ui/PrimarySmallButton";
+import MentorCard from "./UIComponents/Mentorcard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetMentorsQuery } from "@/features/mentor/mentorApiSlice";
 import { useRouter } from "next/navigation";
@@ -194,35 +194,34 @@ export default function MentorSection({ page }) {
       {/* Filters */}
       {page === "mentors" && (
         <>
-        
-      <p className='mb-2'>Quick filters:</p>
-        <div
-          ref={filterScrollRef}
-          className='flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x items-center'
-        >
-          {/* All filter - Always active */}
-          <button
-            disabled
-            className='px-4 py-2 rounded-xl border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start'
+          <p className='mb-2'>Quick filters:</p>
+          <div
+            ref={filterScrollRef}
+            className='flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x items-center'
           >
-            See all filters
-          </button>
-          <div className='w-[2px] h-9  bg-gray-900'></div>
-          {allFilters.map((filter, i) => (
+            {/* All filter - Always active */}
             <button
-              key={i}
-              onClick={() => toggleFilter(filter)}
-              className={`px-4 py-2 rounded-xl border shrink-0 snap-start flex items-center gap-2 ${
-                activeFilters.includes(filter)
-                  ? "text-green-700 border-green-500 font-semibold"
-                  : "text-gray-800 border-gray-300"
-              }`}
+              disabled
+              className='px-4 py-2 rounded-xl border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start'
             >
-              {filter}
-              {activeFilters.includes(filter) && <span>✕</span>}
+              See all filters
             </button>
-          ))}
-        </div>
+            <div className='w-[2px] h-9  bg-gray-900'></div>
+            {allFilters.map((filter, i) => (
+              <button
+                key={i}
+                onClick={() => toggleFilter(filter)}
+                className={`px-4 py-2 rounded-xl border shrink-0 snap-start flex items-center gap-2 ${
+                  activeFilters.includes(filter)
+                    ? "text-green-700 border-green-500 font-semibold"
+                    : "text-gray-800 border-gray-300"
+                }`}
+              >
+                {filter}
+                {activeFilters.includes(filter) && <span>✕</span>}
+              </button>
+            ))}
+          </div>
         </>
       )}
 
