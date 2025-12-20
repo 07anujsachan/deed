@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const variantStyles = {
   PrimarySmallButton:
@@ -30,34 +31,53 @@ export const Button = ({
   href,
   type = "button",
   className = "",
+  showRightArrow = false,
 }) => {
   const finalClasses = clsx(
-    "inline-flex items-center justify-center transition duration-300",
+    "inline-flex items-center justify-center gap-2 transition duration-300",
     variantStyles[variant],
     className
+  );
+
+  const content = (
+    <>
+      <span>{text}</span>
+      {showRightArrow && (
+        <ArrowRight
+          size={20}
+          className='transition-transform duration-300 group-hover:translate-x-1'
+        />
+      )}
+    </>
   );
 
   // 🔗 LINK BUTTON
   if (href) {
     return (
-      <Link href={href} className={finalClasses}>
-        {text}
+      <Link href={href} className={clsx(finalClasses, "group")}>
+        {content}
       </Link>
     );
   }
 
   // 🔘 NORMAL BUTTON
   return (
-    <button type={type} onClick={onClick} className={finalClasses}>
-      {text}
+    <button
+      type={type}
+      onClick={onClick}
+      className={clsx(finalClasses, "group")}
+    >
+      {content}
     </button>
   );
 };
+
 Button.propTypes = {
   text: PropTypes.string.isRequired,
   variant: PropTypes.oneOf(Object.keys(variantStyles)).isRequired,
   onClick: PropTypes.func,
-  href: PropTypes.string, // 👈 link support
+  href: PropTypes.string,
   type: PropTypes.oneOf(["button", "submit", "reset"]),
   className: PropTypes.string,
+  showRightArrow: PropTypes.bool, // 👈 NEW
 };

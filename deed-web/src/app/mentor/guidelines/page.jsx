@@ -1,6 +1,10 @@
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { MentorCard } from "../components/OurMissionCard";
+import { Button } from "@/components/ui/PrimarySmallButton";
+import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const communityGuidelines = [
   {
@@ -54,6 +58,14 @@ export const communityGuidelines = [
 ];
 
 const page = () => {
+  const [checked, setChecked] = useState(false);
+  const router = useRouter();
+  console.log(checked);
+  const handleProceed = () => {
+    if (!checked) return;
+    router.push("/mentor/mentorform/step-1");
+  };
+
   return (
     <div>
       {/* thankyou mentor section  */}
@@ -91,8 +103,8 @@ const page = () => {
           </div>
         </div>
       </section>
-      <div className=' md:max-w-4xl mx-auto text-center w-full px-6 md:px-16 pt-12 md:pt-20'>
-        <h4 className='text-lg md:text-2xl'>
+      <div className=' md:max-w-5xl mx-auto text-center w-full px-6 md:px-16 pt-12 md:pt-20'>
+        <h4 className='text-lg md:text-3xl'>
           We will be taking you to a form to fill up. This form will have 5
           short steps that help us understand you better, your background,
           interests, and the kind of guidance you’d like to offer.
@@ -103,7 +115,7 @@ const page = () => {
       </div>
 
       {/* community guidelines  */}
-      <section className='bg-white mx-6 my-12 md:my-24 rounded-[40px] px-6 md:px-12 py-10 md:py-16'>
+      <section className='bg-white mx-6 my-12 md:my-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
         {/* HEADER */}
         <div className='max-w-3xl mb-10'>
           <h2 className='text-3xl md:text-4xl font-semibold flex items-center gap-2'>
@@ -126,10 +138,54 @@ const page = () => {
               image={item.image}
               badges={item.badges}
               backgroundColor={item.backgroundColor}
+              size="md"
+              imageSize="md"
             />
           ))}
         </div>
       </section>
+
+      {/* accept guideline btn  */}
+      <div className='mx-6 bg-white rounded-[32px] shadow-md px-6 md:px-8 py-8 mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4'>
+        <div className='flex items-start md:items-center gap-4 '>
+          <label className='cursor-pointer'>
+            <span
+              className={`
+            w-8 h-8 flex items-center justify-center rounded-xl
+            border-2 transition
+            ${
+              checked
+                ? "bg-[#3063DA] border-[#3063DA]"
+                : "bg-white border-gray-300"
+            }
+          `}
+            >
+              {checked && <Check size={16} className='text-white' />}
+            </span>
+
+            <input
+              type='checkbox'
+              checked={checked}
+              onChange={() => setChecked(!checked)}
+              className='hidden'
+            />
+          </label>
+          <p className='text-sm md:text-lg max-w-2xl'>
+            I have read the community guidelines and I would like to proceed
+          </p>
+        </div>
+
+        {/* RIGHT: Button */}
+        <Button
+          text='Take me to the form'
+          variant='SecondarySmallButton'
+          showRightArrow
+          className={`whitespace-nowrap ${
+            !checked && "opacity-50 pointer-events-none"
+          }`}
+          onClick={handleProceed}
+        />
+      </div>
     </div>
   );
 };
