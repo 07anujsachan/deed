@@ -21,7 +21,7 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
         focus:border-[#1B752A]
         focus:ring-0
         disabled:bg-gray-100
-        disabled:cursor-not-allowed
+        disabled:cursor-not-allowed mt-2
         `,
         className
       )}

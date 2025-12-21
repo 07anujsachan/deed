@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import IndustrySelector from "./IndustrySelector";
+import MultiOptionWithOthers from "./MultiOptionWithOthers";
 
 export default function ProfessionalForm({ form, setForm }) {
   return (
@@ -51,9 +52,20 @@ export default function ProfessionalForm({ form, setForm }) {
       {/* INDUSTRY */}
       <div className='mt-8'>
         <Label>Industry / field of expertise</Label>
-        <IndustrySelector
+        <MultiOptionWithOthers
+          options={[
+            "Design / UX / UI",
+            "Engineering / Technology",
+            "Medicine / Healthcare",
+            "Business / Finance",
+            "Law / Policy",
+            "Media / Arts",
+            "Education / Research",
+            "Government / Civil Services",
+          ]}
           value={form.industry}
-          onChange={(industries) => setForm({ ...form, industry: industries })}
+          onChange={(industry) => setForm({ ...form, industry })}
+          otherPlaceholder='Enter your industry / expertise'
         />
       </div>
 
