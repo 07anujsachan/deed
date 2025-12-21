@@ -20,7 +20,7 @@ const FormStepCard = ({
       )}
 
       {/* FORM CONTENT (YOU CONTROL THIS) */}
-      <div className='space-y-4'>{children}</div>
+      <div className='space-y-8'>{children}</div>
 
       {/* ACTIONS */}
       <div className='flex justify-between mt-8'>
@@ -29,6 +29,7 @@ const FormStepCard = ({
             text='Previous'
             variant='SecondarySmallOutlinedButton'
             onClick={onPrev}
+            arrowDirection='left'
           />
         ) : (
           <div />
@@ -37,8 +38,8 @@ const FormStepCard = ({
         <Button
           text={nextText}
           variant='SecondarySmallButton'
-          showRightArrow
           onClick={onNext}
+          arrowDirection='right'
         />
       </div>
     </div>

@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const variantStyles = {
   PrimarySmallButton:
@@ -31,7 +31,7 @@ export const Button = ({
   href,
   type = "button",
   className = "",
-  showRightArrow = false,
+  arrowDirection = "none",
 }) => {
   const finalClasses = clsx(
     "inline-flex items-center justify-center gap-2 transition duration-300",
@@ -41,8 +41,16 @@ export const Button = ({
 
   const content = (
     <>
+      {arrowDirection === "left" && (
+        <ArrowLeft
+          size={20}
+          className='transition-transform duration-300 group-hover:-translate-x-1'
+        />
+      )}
+
       <span>{text}</span>
-      {showRightArrow && (
+
+      {arrowDirection === "right" && (
         <ArrowRight
           size={20}
           className='transition-transform duration-300 group-hover:translate-x-1'
