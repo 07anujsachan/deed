@@ -1,15 +1,17 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { StateSelect, CitySelect } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
+import Section from "../../components/ui/Section";
+import { ArrowRight, CheckCircle, X } from "lucide-react";
 
 const INDIA_COUNTRY_ID = 101;
 
-export default function StepOne() {
+export default function Page() {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -19,17 +21,21 @@ export default function StepOne() {
     stateId: null,
     cityId: null,
   });
+  const [email, setEmail] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   const handleSubmit = async () => {
-    await fetch("/api/mentor/step-1", {
-      method: "POST",
-      body: JSON.stringify({
-        ...form,
-        countryId: INDIA_COUNTRY_ID, // 🔥 always India
-      }),
-    });
-
-    router.push("/mentor/mentorform/step-2");
+    // await fetch("/api/mentor/step-1", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     ...form,
+    //     countryId: INDIA_COUNTRY_ID,
+    //   }),
+    // });
+    if (emailVerified) {
+      router.push("/mentor/mentorform/step-2");
+    }
   };
 
   return (
@@ -38,36 +44,103 @@ export default function StepOne() {
       showPrev={false}
       onNext={handleSubmit}
     >
-      <div>
-        <Label className='mb-4'>Let us know your Full Name</Label>
+      {/* EMAIL */}
+
+      <Section title='What is your email address'>
+        <div className='flex items-center gap-3 w-full'>
+          {/* INPUT WRAPPER */}
+          <div className='relative flex-1'>
+            <Input
+              type='email'
+              placeholder='Email address'
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailVerified(false);
+              }}
+              className='pr-20'
+              disabled={emailVerified}
+              required={true}
+            />
+
+            {/* CLEAR ICON */}
+            {email && !emailVerified && (
+              <button
+                type='button'
+                onClick={() => setEmail("")}
+                className='
+            absolute right-3 top-[56%] -translate-y-1/2
+            border border-gray-400 rounded-full p-1 
+            text-gray-500 hover:text-gray-800
+            hover:border-gray-800
+          '
+              >
+                <X size={14} />
+              </button>
+            )}
+
+            {/* VERIFIED ICON */}
+            {emailVerified && (
+              <CheckCircle
+                size={18}
+                className='absolute right-3 top-[56%] -translate-y-1/2 text-green-600'
+              />
+            )}
+          </div>
+
+          {/* VERIFY BUTTON */}
+          {!emailVerified && email && (
+            <button
+              type='button'
+              onClick={async () => {
+                setVerifying(true);
+                await new Promise((res) => setTimeout(res, 1200));
+                setEmailVerified(true);
+                setVerifying(false);
+              }}
+              disabled={verifying}
+              className='
+          text-blue-600 font-semibold text-sm
+          flex items-center gap-1
+          whitespace-nowrap
+        '
+            >
+              {verifying ? "Verifying..." : "Verify email"}
+              {!verifying && <ArrowRight size={14} />}
+            </button>
+          )}
+
+          {/* VERIFIED TEXT */}
+          {emailVerified && (
+            <span className='text-green-600 font-semibold text-sm pt-1 whitespace-nowrap'>
+              Verified
+            </span>
+          )}
+        </div>
+      </Section>
+
+      {/* FULL NAME */}
+      <Section title='Let us know your full name'>
         <Input
           placeholder='Full Name'
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
+          required={true}
         />
-      </div>
+      </Section>
 
-      <div>
-        <Label className='mb-4'>Email Address</Label>
-        <Input
-          type='email'
-          placeholder='Email'
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-        />
-      </div>
-
-      <div>
-        <Label className='mb-4'>Phone Number</Label>
+      {/* PHONE */}
+      <Section title='Phone number'>
         <Input
           placeholder='Phone'
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
         />
-      </div>
-      <div>
-        <Label>Which state and city you belong to?</Label>
-        <div className='flex justify-between gap-4 mt-1'>
+      </Section>
+
+      {/* LOCATION */}
+      <Section title='Which state and city do you belong to?'>
+        <div className='flex gap-4'>
           {/* STATE */}
           <div className='basis-1/2'>
             <StateSelect
@@ -77,7 +150,7 @@ export default function StepOne() {
                 setForm({
                   ...form,
                   stateId: state?.id || null,
-                  cityId: null, // reset city on state change
+                  cityId: null,
                 })
               }
               placeHolder='Select State'
@@ -103,7 +176,7 @@ export default function StepOne() {
             />
           </div>
         </div>
-      </div>
+      </Section>
     </FormStepCard>
   );
 }

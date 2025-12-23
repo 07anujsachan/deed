@@ -7,17 +7,17 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const variantStyles = {
   PrimarySmallButton:
-    "bg-[#1B752A] text-[#D5FFDC] px-8 py-3 text-lg rounded-2xl font-semibold",
+    "bg-[#1B752A] text-[#D5FFDC] px-4 md:px-8 py-2 md:py-3 text-sm md:text-lg rounded-2xl font-semibold",
   PrimarySmallOutlinedButton:
-    "border-2 border-[#1B752A] bg-[#EFFFF1] text-[#1B752A] px-8 py-3 text-lg rounded-2xl font-semibold",
+    "border-2 border-[#1B752A] bg-[#EFFFF1] text-[#1B752A] px-4 md:px-8 py-2 md:py-3 text-sm md:text-lg rounded-2xl font-semibold",
   PrimaryLargeButton:
     "bg-[#1B752A] text-[#D5FFDC] px-8 py-4 text-lg rounded-2xl font-semibold",
   PrimaryLargeOutlinedButton:
     "border-2 border-[#1B752A] bg-[#EFFFF1] text-[#1B752A] px-8 py-4 text-lg rounded-2xl font-semibold",
   SecondarySmallButton:
-    "bg-[#3063DA] text-[#EDF2FF] px-8 py-3 text-lg rounded-2xl font-semibold",
+    "bg-[#3063DA] text-[#EDF2FF] px-4 md:px-8 py-2 md:py-3 text-sm md:text-lg rounded-2xl font-semibold",
   SecondarySmallOutlinedButton:
-    "border-2 border-[#3063DA] bg-[#EDF2FF] text-[#3063DA] px-8 py-3 text-lg rounded-2xl font-semibold",
+    "border-2 border-[#3063DA] bg-[#EDF2FF] text-[#3063DA] px-4 md:px-8 py-2 md:py-3 text-sm md:text-lg rounded-2xl font-semibold",
   SecondaryLargeButton:
     "bg-[#3063DA] text-[#EDF2FF] px-8 py-4 text-lg rounded-2xl font-semibold",
   SecondaryLargeOutlinedButton:

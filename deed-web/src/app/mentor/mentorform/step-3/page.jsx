@@ -2,10 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
-import { Input } from "@/components/ui/input";
 import Section from "../../components/ui/Section";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
-import OtherInlineOption from "../../components/ui/OtherInlineOption";
 import Flex from "../../components/ui/Flex";
 import MultiOptionWithOthers from "../../components/MultiOptionWithOthers";
 
@@ -19,21 +17,6 @@ export default function StepFour() {
     languages: [],
     otherLanguages: "",
   });
-
-  const toggleArray = (key, value) => {
-    setForm((prev) => ({
-      ...prev,
-      [key]: prev[key].includes(value)
-        ? prev[key].filter((v) => v !== value)
-        : [...prev[key], value],
-    }));
-  };
-
-  const addSubject = (value) =>
-    setForm((prev) => ({
-      ...prev,
-      subjects: [...prev.subjects, value],
-    }));
 
   const handleSubmit = async () => {
     // await fetch("/api/mentor/step-2", {
@@ -55,23 +38,20 @@ export default function StepFour() {
     >
       {/* SUBJECTS */}
       <Section title='Which subjects or career paths can you guide students about?'>
-<MultiOptionWithOthers
-  options={[
-    "Engineering / Tech careers",
-    "Medical / Life Sciences",
-    "Design / Architecture",
-    "Business / Entrepreneurship",
-    "Law / Civil Services",
-    "Arts / Humanities",
-    "Media / Journalism / Communication",
-  ]}
-  value={form.subjects}
-  onChange={(subjects) =>
-    setForm({ ...form, subjects })
-  }
-  otherPlaceholder="Enter subject or career path"
-/>
-
+        <MultiOptionWithOthers
+          options={[
+            "Engineering / Tech careers",
+            "Medical / Life Sciences",
+            "Design / Architecture",
+            "Business / Entrepreneurship",
+            "Law / Civil Services",
+            "Arts / Humanities",
+            "Media / Journalism / Communication",
+          ]}
+          value={form.subjects}
+          onChange={(subjects) => setForm({ ...form, subjects })}
+          otherPlaceholder='Enter subject or career path'
+        />
       </Section>
 
       {/* FREQUENCY */}
@@ -113,16 +93,13 @@ export default function StepFour() {
 
       {/* LANGUAGES */}
       <Section title='Languages you can comfortably communicate in'>
-<MultiOptionWithOthers
-  options={["English", "Hindi", "Urdu", "Punjabi"]}
-  value={form.languages}
-  onChange={(languages) =>
-    setForm({ ...form, languages })
-  }
-  otherLabel="Other languages"
-  otherPlaceholder="Enter language"
-/>
-
+        <MultiOptionWithOthers
+          options={["English", "Hindi", "Urdu", "Punjabi"]}
+          value={form.languages}
+          onChange={(languages) => setForm({ ...form, languages })}
+          otherLabel='Other languages'
+          otherPlaceholder='Enter language'
+        />
       </Section>
     </FormStepCard>
   );

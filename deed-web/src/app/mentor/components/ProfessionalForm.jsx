@@ -1,35 +1,38 @@
 "use client";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import IndustrySelector from "./IndustrySelector";
 import MultiOptionWithOthers from "./MultiOptionWithOthers";
+import Section from "./ui/Section";
 
 export default function ProfessionalForm({ form, setForm }) {
   return (
     <>
-      <div className='mt-8'>
-        <Label>Current occupation / job title</Label>
+      {/* OCCUPATION */}
+      <Section title="Current occupation / job title">
         <Input
-          placeholder='Enter job title here'
+          placeholder="Enter job title here"
           value={form.occupation}
-          onChange={(e) => setForm({ ...form, occupation: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, occupation: e.target.value })
+          }
         />
-      </div>
+      </Section>
 
-      <div className='mt-8'>
-        <Label>Organization / company name</Label>
+      {/* COMPANY */}
+      <Section title="Organization / company name">
         <Input
-          placeholder='Enter company name here'
+          placeholder="Enter company name here"
           value={form.company}
-          onChange={(e) => setForm({ ...form, company: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, company: e.target.value })
+          }
         />
-      </div>
+      </Section>
 
       {/* EXPERIENCE */}
-      <div className='mt-8'>
-        <Label>Years of experience</Label>
-        <div className='flex flex-wrap gap-8 mt-2'>
+      <Section title="Years of experience">
+        <div className="flex flex-wrap gap-6">
           {[
             "Less than 1 year",
             "1-3 years",
@@ -37,21 +40,25 @@ export default function ProfessionalForm({ form, setForm }) {
             "5-10 years",
             "10+ years",
           ].map((exp) => (
-            <Label key={exp} className='flex items-center gap-2 font-normal'>
+            <label
+              key={exp}
+              className="flex items-center gap-2 font-normal cursor-pointer"
+            >
               <Checkbox
-                type='radio'
+                type="radio"
                 checked={form.experience === exp}
-                onCheckedChange={() => setForm({ ...form, experience: exp })}
+                onCheckedChange={() =>
+                  setForm({ ...form, experience: exp })
+                }
               />
               {exp}
-            </Label>
+            </label>
           ))}
         </div>
-      </div>
+      </Section>
 
       {/* INDUSTRY */}
-      <div className='mt-8'>
-        <Label>Industry / field of expertise</Label>
+      <Section title="Industry / field of expertise">
         <MultiOptionWithOthers
           options={[
             "Design / UX / UI",
@@ -64,19 +71,23 @@ export default function ProfessionalForm({ form, setForm }) {
             "Government / Civil Services",
           ]}
           value={form.industry}
-          onChange={(industry) => setForm({ ...form, industry })}
-          otherPlaceholder='Enter your industry / expertise'
+          onChange={(industry) =>
+            setForm({ ...form, industry })
+          }
+          otherPlaceholder="Enter your industry / expertise"
         />
-      </div>
+      </Section>
 
-      <div className='mt-8'>
-        <Label>LinkedIn profile</Label>
+      {/* LINKEDIN */}
+      <Section title="LinkedIn profile">
         <Input
-          placeholder='Enter LinkedIn profile URL'
+          placeholder="Enter LinkedIn profile URL"
           value={form.linkedin}
-          onChange={(e) => setForm({ ...form, linkedin: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, linkedin: e.target.value })
+          }
         />
-      </div>
+      </Section>
     </>
   );
 }

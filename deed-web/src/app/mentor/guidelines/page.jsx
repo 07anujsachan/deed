@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MentorCard } from "../components/OurMissionCard";
 import { Button } from "@/components/ui/PrimarySmallButton";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import AcceptBar from "../components/AcceptBar";
 
 export const communityGuidelines = [
   {
@@ -57,32 +58,48 @@ export const communityGuidelines = [
   },
 ];
 
-const page = () => {
+const Page = () => {
   const [checked, setChecked] = useState(false);
+  const [isFloating, setIsFloating] = useState(true);
+
+  const anchorRef = useRef(null);
   const router = useRouter();
-  console.log(checked);
+
   const handleProceed = () => {
     if (!checked) return;
     router.push("/mentor/mentorform/step-1");
   };
 
+  // 🔥 Intersection Observer → controls fixed/static behavior
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFloating(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    if (anchorRef.current) observer.observe(anchorRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div>
-      {/* thankyou mentor section  */}
+      {/* THANK YOU SECTION */}
       <section className='w-full bg-[#E9EAFE] px-6 md:px-16 pt-12 md:pt-20'>
         <div className='flex flex-col md:flex-row items-center justify-between gap-10'>
-          {/* LEFT CONTENT */}
           <div className='md:w-1/2 text-center md:text-left'>
             <h2 className='text-3xl md:text-6xl font-semibold text-gray-900 md:leading-snug'>
-              Thank you for <br className='mb-2' />
-              choosing to guide <br className='mb-2' />
+              Thank you for <br />
+              choosing to guide <br />
               the next generation
             </h2>
 
             <p className='mt-6 text-gray-700 text-base md:text-xl md:leading-relaxed max-w-2xl'>
               <span className='font-semibold'>
                 We’re truly grateful that you’re here.
-              </span>{" "}
+              </span>
               <br />
               By becoming a career guide, you’re choosing to make a difference,
               to help school students discover their strengths, make informed
@@ -90,7 +107,6 @@ const page = () => {
             </p>
           </div>
 
-          {/* RIGHT ILLUSTRATION */}
           <div className='md:w-1/2 flex justify-end items-end'>
             <Image
               src='/media/thankyou.png'
@@ -103,32 +119,19 @@ const page = () => {
           </div>
         </div>
       </section>
-      <div className=' md:max-w-5xl mx-auto text-center w-full px-6 md:px-16 pt-12 md:pt-20'>
-        <h4 className='text-lg md:text-3xl'>
-          We will be taking you to a form to fill up. This form will have 5
-          short steps that help us understand you better, your background,
-          interests, and the kind of guidance you’d like to offer.
-        </h4>
-        <p className=' text-sm text-gray-600 md:text-lg my-4'>
-          But before you start we would like you to understand the following:
-        </p>
-      </div>
 
-      {/* community guidelines  */}
-      <section className='bg-white mx-6 my-12 md:my-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
-        {/* HEADER */}
+      {/* GUIDELINES */}
+      <section className='bg-white mx-6 mt-12 md:mt-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
         <div className='max-w-3xl mb-10'>
-          <h2 className='text-3xl md:text-4xl font-semibold flex items-center gap-2'>
+          <h2 className='text-3xl md:text-4xl font-semibold'>
             🤝 Community Guidelines
           </h2>
-          <p className='mt-3 text-gray-700 text-lg leading-relaxed'>
+          <p className='mt-3 text-gray-700 text-lg'>
             At Deed, we’re building a community based on respect, empathy, and
-            authenticity. Before you begin, please take a moment to go through
-            our simple principles:
+            authenticity.
           </p>
         </div>
 
-        {/* GRID */}
         <div className='flex flex-wrap gap-4'>
           {communityGuidelines.map((item, index) => (
             <MentorCard
@@ -138,56 +141,24 @@ const page = () => {
               image={item.image}
               badges={item.badges}
               backgroundColor={item.backgroundColor}
-              size="md"
-              imageSize="md"
+              size='md'
+              imageSize='md'
             />
           ))}
         </div>
       </section>
 
-      {/* accept guideline btn  */}
-      <div className='mx-6 bg-white rounded-[32px] shadow-md px-6 md:px-8 py-8 mb-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4'>
-        <div className='flex items-start md:items-center gap-4 '>
-          <label className='cursor-pointer'>
-            <span
-              className={`
-            w-8 h-8 flex items-center justify-center rounded-xl
-            border-2 transition
-            ${
-              checked
-                ? "bg-[#3063DA] border-[#3063DA]"
-                : "bg-white border-gray-300"
-            }
-          `}
-            >
-              {checked && <Check size={16} className='text-white' />}
-            </span>
-
-            <input
-              type='checkbox'
-              checked={checked}
-              onChange={() => setChecked(!checked)}
-              className='hidden'
-            />
-          </label>
-          <p className='text-sm md:text-lg max-w-2xl'>
-            I have read the community guidelines and I would like to proceed
-          </p>
-        </div>
-
-        {/* RIGHT: Button */}
-        <Button
-          text='Take me to the form'
-          variant='SecondarySmallButton'
-          showRightArrow
-          className={`whitespace-nowrap ${
-            !checked && "opacity-50 pointer-events-none"
-          }`}
-          onClick={handleProceed}
+      {/* Accept bar section */}
+      <div ref={anchorRef} className='w-full flex justify-center my-16'>
+        <AcceptBar
+          checked={checked}
+          setChecked={setChecked}
+          onProceed={handleProceed}
+          isFloating={isFloating}
         />
       </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

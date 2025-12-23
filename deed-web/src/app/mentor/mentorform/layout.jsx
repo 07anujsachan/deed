@@ -32,7 +32,7 @@ export default function MentorFormLayout({ children }) {
               alt='Thank you illustration'
               width={520}
               height={420}
-              className='w-full md:max-w-sm'
+              className='w-full md:max-w-sm max-w-xs'
               priority
             />
           </div>

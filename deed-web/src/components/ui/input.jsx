@@ -14,8 +14,8 @@ const Input = React.forwardRef(({ className, type, ...props }, ref) => {
         bg-white
         px-4 py-3
         text-sm md:text-base
-        text-gray-700
-        placeholder:text-gray-700
+        text-gray-900
+        placeholder:text-gray-400
         outline-none
         transition
         focus:border-[#1B752A]
