@@ -59,7 +59,7 @@ const FAQSection = () => {
         
         {/* LEFT CONTENT */}
         <div className="basis-1/3">
-          <h2 className="text-4xl md:text-5xl font-semibold mb-4">
+          <h2 className="text-3xl md:text-5xl font-semibold mb-4">
             Some common questions
           </h2>
           <p className="text-gray-600 text-lg">

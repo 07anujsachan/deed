@@ -55,10 +55,10 @@ export default function StepFive() {
     payload.append("about", form.about);
     payload.append("agreements", JSON.stringify(form.agreements));
 
-    await fetch("/api/mentor/submit", {
-      method: "POST",
-      body: payload,
-    });
+    // await fetch("/api/mentor/submit", {
+    //   method: "POST",
+    //   body: payload,
+    // });
 
     router.push("/mentor/thank-you");
   };
@@ -194,10 +194,11 @@ export default function StepFive() {
       <AnimatePresence>
         {showDeleteModal && (
           <motion.div
-            className='fixed inset-0 z-50 bg-black/30 flex items-center justify-center'
+            className='fixed inset-0 z-50 bg-black/30 flex items-center justify-center w-full space-y-4 max-w-full'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            style={{ top: "-10%" }}
           >
             <motion.div
               className='bg-white rounded-2xl p-6 w-[90%] max-w-lg'

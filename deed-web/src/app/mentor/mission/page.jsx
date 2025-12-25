@@ -110,32 +110,36 @@ const page = () => {
         whileInView='visible'
         exit='exit'
         viewport={{ once: true, amount: 0.3 }}
-        className='text-center mt-6 md:mt-12 px-6'
+        className='min-h-fit md:min-h-fit flex flex-col text-center px-6 mt-24 md:mt-12'
       >
         <div>
-          <h1 className='text-4xl md:text-[80px] font-semibold leading-snug text-gray-900'>
+          <h1 className='text-3xl md:text-[80px] font-semibold leading-snug text-gray-900'>
             <span className=''>Share Your Journey.</span> <br />
             <span className=''>Shape Someone’s Future</span>
           </h1>
 
-          <p className='mt-6 text-xl md:text-2xl text-gray-600 mx-auto'>
-            Help students find their path by sharing the lessons, stories, and
-            insights <br />
-            <span className='font-semibold'>from your own journey</span>
-          </p>
-          <Button
-            className='mt-9'
-            text={"Get Started"}
-            type='button'
-            variant={"SecondarySmallButton"}
-            href={"/mentor/guidelines"}
-          />
-          <img
-            loading='lazy'
-            className='w-11/12 mx-auto mt-20'
-            src='/media/mission.png'
-            alt='mission'
-          />
+          <div className='flex flex-col items-center gap-4'>
+            <p className='mt-6 text-xl md:text-2xl text-gray-600 mx-auto order-2 md:order-1'>
+              Help students find their path by sharing the lessons, stories, and
+              insights <br className='hidden md:block' />
+              <span className='font-semibold'>from your own journey</span>
+            </p>
+            <div className='order-3 md:order-2'>
+              <Button
+                className='mt-9'
+                text={"Get Started"}
+                type='button'
+                variant={"SecondarySmallButton"}
+                href={"/mentor/guidelines"}
+              />
+            </div>
+            <img
+              loading='lazy'
+              className='w-full mx-auto mt-12 md:mt-20 order-1 md:order-3 md:object-contain object-cover'
+              src='/media/mission.png'
+              alt='mission'
+            />
+          </div>
         </div>
       </motion.section>
 
@@ -152,11 +156,11 @@ const page = () => {
         className='py-4 md:py-12 mx-6 rounded-[40px] my-12 md:my-24'
       >
         <div className='text-center my-8 md:my-16'>
-          <h2 className='text-default md:text-[56px] text-4xl font-semibold my-4 '>
+          <h2 className='text-3xl md:text-[56px] font-semibold my-4'>
             {" "}
             Why to become a career guide
           </h2>
-          <p className='mt-4 md:text-2xl text-lg text-gray-600 md:w-[52%] w-full mx-auto leading-snug'>
+          <p className='mt-10 md:text-2xl text-base text-gray-600 md:max-w-5xl w-full mx-auto leading-snug'>
             You’ve walked the path they’re just beginning.{" "}
             <span className='font-semibold'>
               Your insights, challenges, and wins can light the way for someone

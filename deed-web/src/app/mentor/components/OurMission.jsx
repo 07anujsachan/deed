@@ -21,24 +21,24 @@ const OurMission = ({ teamData }) => {
       whileInView='visible'
       exit='exit'
       viewport={{ once: true, amount: 0.3 }}
-      className='bg-white py-4 md:py-12 mx-6 rounded-[40px] my-12 md:my-24'
+      className='bg-white py-4 md:py-12 mx-6 rounded-[40px] my-12 md:my-24 px-2'
     >
       <div className='text-center my-8 md:my-16'>
-        <h2 className='text-default md:text-[56px] text-4xl font-semibold my-4 '>
+        <h2 className='md:text-[56px] text-3xl font-semibold my-4 '>
           {" "}
           Our Mission
         </h2>
         <p className='font-semibold md:text-2xl text-gray-600 text-lg my-4 mt-6'>
           Empower India’s next generation — one conversation at a time
         </p>
-        <p className=' md:text-2xl text-lg text-gray-600 md:w-[52%] w-full mx-auto leading-snug'>
+        <p className=' md:text-2xl text-base text-gray-600 md:max-w-5xl w-full mx-auto leading-snug'>
           At Deed, we believe that the right guidance can change lives,
           especially in places where opportunities are still catching up. By
           becoming a career guide, you can help students see beyond their
           surroundings, make informed choices, and chase the futures they
           deserve
         </p>
-        <p className='font-semibold text-gray-600 md:text-2xl text-xl'>
+        <p className='font-semibold text-gray-600 md:text-2xl text-xl my-4'>
           Your story could be the spark that changes someone’s life.
         </p>
       </div>

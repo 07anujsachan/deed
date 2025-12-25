@@ -101,7 +101,7 @@ export default function Page() {
               disabled={verifying}
               className='
           text-blue-600 font-semibold text-sm
-          flex items-center gap-1
+          flex items-center gap-1 pt-2
           whitespace-nowrap
         '
             >
@@ -112,7 +112,7 @@ export default function Page() {
 
           {/* VERIFIED TEXT */}
           {emailVerified && (
-            <span className='text-green-600 font-semibold text-sm pt-1 whitespace-nowrap'>
+            <span className='text-green-600 font-semibold text-sm pt-2 whitespace-nowrap'>
               Verified
             </span>
           )}
