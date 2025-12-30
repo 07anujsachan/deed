@@ -19,7 +19,7 @@ export default function StepTwo() {
     company: "",
     experience: "",
     industry: [],
-    linkedin: "",
+    socials: [],
     education: [
       {
         level: "",

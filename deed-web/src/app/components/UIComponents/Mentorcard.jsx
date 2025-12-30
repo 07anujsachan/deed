@@ -1,3 +1,4 @@
+"use client"
 import { Check, ChevronDown, GraduationCap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,7 +23,7 @@ const MentorCard = ({
     >
       {/* Image + Tags */}
       <div className='relative rounded-xl overflow-hidden aspect-square bg-checkerboard'>
-        <img src={photo} alt={name} className='w-full h-full object-cover' />
+        <img src={photo} alt={fullName} className='w-full h-full object-cover' />
         <div className='absolute top-2 left-2 flex flex-col gap-2'>
           {expertise.map((tag, index) => (
             <div

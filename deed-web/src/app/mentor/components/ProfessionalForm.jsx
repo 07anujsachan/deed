@@ -4,35 +4,32 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import MultiOptionWithOthers from "./MultiOptionWithOthers";
 import Section from "./ui/Section";
+import SocialLinksSelector from "./ui/SocialLinkSelector";
 
 export default function ProfessionalForm({ form, setForm }) {
   return (
     <>
       {/* OCCUPATION */}
-      <Section title="Current occupation / job title">
+      <Section title='Current occupation / job title'>
         <Input
-          placeholder="Enter job title here"
+          placeholder='Enter job title here'
           value={form.occupation}
-          onChange={(e) =>
-            setForm({ ...form, occupation: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, occupation: e.target.value })}
         />
       </Section>
 
       {/* COMPANY */}
-      <Section title="Organization / company name">
+      <Section title='Organization / company name'>
         <Input
-          placeholder="Enter company name here"
+          placeholder='Enter company name here'
           value={form.company}
-          onChange={(e) =>
-            setForm({ ...form, company: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, company: e.target.value })}
         />
       </Section>
 
       {/* EXPERIENCE */}
-      <Section title="Years of experience">
-        <div className="flex flex-wrap gap-6">
+      <Section title='Years of experience'>
+        <div className='flex flex-wrap gap-6'>
           {[
             "Less than 1 year",
             "1-3 years",
@@ -42,14 +39,12 @@ export default function ProfessionalForm({ form, setForm }) {
           ].map((exp) => (
             <label
               key={exp}
-              className="flex items-center gap-2 font-normal cursor-pointer"
+              className='flex items-center gap-2 font-normal cursor-pointer'
             >
               <Checkbox
-                type="radio"
+                type='radio'
                 checked={form.experience === exp}
-                onCheckedChange={() =>
-                  setForm({ ...form, experience: exp })
-                }
+                onCheckedChange={() => setForm({ ...form, experience: exp })}
               />
               {exp}
             </label>
@@ -58,7 +53,7 @@ export default function ProfessionalForm({ form, setForm }) {
       </Section>
 
       {/* INDUSTRY */}
-      <Section title="Industry / field of expertise">
+      <Section title='Industry / field of expertise'>
         <MultiOptionWithOthers
           options={[
             "Design / UX / UI",
@@ -71,23 +66,18 @@ export default function ProfessionalForm({ form, setForm }) {
             "Government / Civil Services",
           ]}
           value={form.industry}
-          onChange={(industry) =>
-            setForm({ ...form, industry })
-          }
-          otherPlaceholder="Enter your industry / expertise"
+          onChange={(industry) => setForm({ ...form, industry })}
+          otherPlaceholder='Enter your industry / expertise'
         />
       </Section>
 
-      {/* LINKEDIN */}
-      <Section title="LinkedIn profile">
-        <Input
-          placeholder="Enter LinkedIn profile URL"
-          value={form.linkedin}
-          onChange={(e) =>
-            setForm({ ...form, linkedin: e.target.value })
-          }
-        />
-      </Section>
+        {/* SOCIAL LINKS */}
+        <Section title='Social profiles'>
+          <SocialLinksSelector
+            value={form.socials}
+            onChange={(socials) => setForm({ ...form, socials })}
+          />
+        </Section>
     </>
   );
 }

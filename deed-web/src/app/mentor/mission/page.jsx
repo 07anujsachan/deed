@@ -102,7 +102,7 @@ const page = () => {
     });
   };
   return (
-    <div>
+    <div className='mx-3 md:mx-8'>
       {/* hero section  */}
       <motion.section
         variants={sectionVariants}
@@ -110,7 +110,7 @@ const page = () => {
         whileInView='visible'
         exit='exit'
         viewport={{ once: true, amount: 0.3 }}
-        className='min-h-fit md:min-h-fit flex flex-col text-center px-6 mt-24 md:mt-12'
+        className='min-h-fit md:min-h-fit flex flex-col text-center px-3 md:px-8 mt-24 md:mt-12'
       >
         <div>
           <h1 className='text-3xl md:text-[80px] font-semibold leading-snug text-gray-900'>
@@ -153,7 +153,7 @@ const page = () => {
         whileInView='visible'
         exit='exit'
         viewport={{ once: true, amount: 0.3 }}
-        className='py-4 md:py-12 mx-6 rounded-[40px] my-12 md:my-24'
+        className='py-4 md:py-12 rounded-[40px] my-12 md:my-24'
       >
         <div className='text-center my-8 md:my-16'>
           <h2 className='text-3xl md:text-[56px] font-semibold my-4'>

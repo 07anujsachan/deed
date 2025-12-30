@@ -22,10 +22,10 @@ export default function Home({ setTheme }) {
     }
   };
 
-  const [showAllGuides, setShowAllGuides] = useState(false);
-  const [active, setActive] = useState("design");
-  const activeLink = useSelector((state) => state.global.activeTab);
-  const dispatch = useDispatch();
+  // const [showAllGuides, setShowAllGuides] = useState(false);
+  // const [active, setActive] = useState("design");
+  // const activeLink = useSelector((state) => state.global.activeTab);
+  // const dispatch = useDispatch();
 
   return (
     <div className=''>

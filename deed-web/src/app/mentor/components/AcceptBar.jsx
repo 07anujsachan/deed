@@ -18,15 +18,15 @@ export default function AcceptBar({
       }}
       className={`
         z-50 bg-white shadow-md
-        px-6 md:px-8 py-6 md:py-8 mx-6
+        px-3 md:px-8 py-6 md:py-8 mx-3 md:mx-8 max-width-auto
         ${
           isFloating
-            ? "fixed bottom-0 max-width-4xl rounded-t-[32px]"
-            : "relative max-width-auto rounded-[32px]"
+            ? "fixed bottom-0 rounded-t-[32px]"
+            : "relative rounded-[32px]"
         }
       `}
       style={{
-        width: isFloating ? "90%" : "100%",
+        width: "96.5%",
       }}
     >
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4'>

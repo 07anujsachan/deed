@@ -54,7 +54,7 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="bg-white mx-6 my-12 md:my-24 rounded-[40px] p-6 md:p-16">
+    <section className="bg-white my-12 md:my-24 rounded-[40px] p-6 md:p-16">
       <div className="flex md:flex-row flex-col justify-between gap-12">
         
         {/* LEFT CONTENT */}

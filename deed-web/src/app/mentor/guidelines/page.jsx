@@ -87,7 +87,7 @@ const Page = () => {
   return (
     <div>
       {/* THANK YOU SECTION */}
-      <section className='w-full bg-[#E9EAFE] px-6 md:px-16 pt-12 md:pt-20'>
+      <section className='w-full bg-[#E9EAFE] px-3 md:px-8 pt-12 md:pt-20'>
         <div className='flex flex-col md:flex-row items-center justify-between gap-10'>
           <div className='md:w-1/2 text-center md:text-left'>
             <h2 className='text-3xl md:text-6xl font-semibold text-gray-900 md:leading-snug'>
@@ -121,7 +121,7 @@ const Page = () => {
       </section>
 
       {/* GUIDELINES */}
-      <section className='bg-white mx-6 mt-12 md:mt-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
+      <section className='bg-white mx-3 md:mx-8 mt-12 md:mt-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
         <div className='max-w-3xl mb-10'>
           <h2 className='text-3xl md:text-4xl font-semibold'>
             🤝 Community Guidelines

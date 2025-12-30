@@ -21,7 +21,7 @@ const OurMission = ({ teamData }) => {
       whileInView='visible'
       exit='exit'
       viewport={{ once: true, amount: 0.3 }}
-      className='bg-white py-4 md:py-12 mx-6 rounded-[40px] my-12 md:my-24 px-2'
+      className='bg-white py-4 md:py-12 rounded-[40px] my-12 md:my-24 px-2'
     >
       <div className='text-center my-8 md:my-16'>
         <h2 className='md:text-[56px] text-3xl font-semibold my-4 '>

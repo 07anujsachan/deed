@@ -1,4 +1,5 @@
-import MentorSection from "../components/Mentor";
+"use client";
+import MentorSection from "@/app/components/Mentor";
 
 export default function MentorsPage() {
   return (

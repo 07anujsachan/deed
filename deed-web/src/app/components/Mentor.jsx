@@ -3,127 +3,127 @@ import { useState, useRef } from "react";
 import { Button } from "../../components/ui/PrimarySmallButton";
 import MentorCard from "./UIComponents/Mentorcard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useGetMentorsQuery } from "@/features/mentor/mentorApiSlice";
+// import { useGetMentorsQuery } from "@/features/mentor/mentorApiSlice";
 import { useRouter } from "next/navigation";
 
 // Dummy mentors data (all same image + master added in education)
-// const mentors = [
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Anurag Sachan",
-//     title: "UI/UX Designer",
-//     categories: ["design"],
-//     tags: ["Design", "UX", "Figma"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "Bachelor of Fine Art (BFA)",
-//         institute: "College of Art, Delhi University, New Delhi",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Rohit Kumar",
-//     title: "Frontend Developer & UI/UX",
-//     categories: ["development", "design"],
-//     tags: ["React", "JavaScript", "Tailwind"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "B.Tech in Computer Science",
-//         institute: "IIT Kanpur",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Sneha Verma",
-//     title: "Educator",
-//     categories: ["teaching"],
-//     tags: ["Education", "Training"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "M.Ed",
-//         institute: "Delhi University",
-//       },
-//       {
-//         degree: "B.Ed",
-//         institute: "Jamia Millia Islamia, New Delhi",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Rahul Sharma",
-//     title: "Software Engineer",
-//     categories: ["development"],
-//     tags: ["Node.js", "Next.js", "API"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "B.Tech in Information Technology",
-//         institute: "NIT Trichy",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Priya Mehta",
-//     title: "Doctor & Medical Researcher",
-//     categories: ["medical"],
-//     tags: ["MBBS", "Research"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "MBBS",
-//         institute: "AIIMS, Delhi",
-//       },
-//       {
-//         degree: "MD in Medicine",
-//         institute:
-//           "Postgraduate Institute of Medical Education and Research, Chandigarh",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Amit Singh",
-//     title: "Artist & Entrepreneur",
-//     categories: ["art", "business"],
-//     tags: ["Fine Arts", "Startup"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "Bachelor of Fine Arts",
-//         institute: "MS University, Baroda",
-//       },
-//       {
-//         degree: "MBA",
-//         institute: "IIM Ahmedabad",
-//       },
-//     ],
-//   },
-// ];
+const mentors = [
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Anurag Sachan",
+    title: "UI/UX Designer",
+    categories: ["design"],
+    tags: ["Design", "UX", "Figma"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "Bachelor of Fine Art (BFA)",
+        institute: "College of Art, Delhi University, New Delhi",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Rohit Kumar",
+    title: "Frontend Developer & UI/UX",
+    categories: ["development", "design"],
+    tags: ["React", "JavaScript", "Tailwind"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "B.Tech in Computer Science",
+        institute: "IIT Kanpur",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Sneha Verma",
+    title: "Educator",
+    categories: ["teaching"],
+    tags: ["Education", "Training"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "M.Ed",
+        institute: "Delhi University",
+      },
+      {
+        degree: "B.Ed",
+        institute: "Jamia Millia Islamia, New Delhi",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Rahul Sharma",
+    title: "Software Engineer",
+    categories: ["development"],
+    tags: ["Node.js", "Next.js", "API"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "B.Tech in Information Technology",
+        institute: "NIT Trichy",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Priya Mehta",
+    title: "Doctor & Medical Researcher",
+    categories: ["medical"],
+    tags: ["MBBS", "Research"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "MBBS",
+        institute: "AIIMS, Delhi",
+      },
+      {
+        degree: "MD in Medicine",
+        institute:
+          "Postgraduate Institute of Medical Education and Research, Chandigarh",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Amit Singh",
+    title: "Artist & Entrepreneur",
+    categories: ["art", "business"],
+    tags: ["Fine Arts", "Startup"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "Bachelor of Fine Arts",
+        institute: "MS University, Baroda",
+      },
+      {
+        degree: "MBA",
+        institute: "IIM Ahmedabad",
+      },
+    ],
+  },
+];
 
 const allFilters = [
   "Top rated",
@@ -141,8 +141,8 @@ export default function MentorSection({ page }) {
   const [activeFilters, setActiveFilters] = useState([]);
   const filterScrollRef = useRef(null);
   const cardScrollRef = useRef(null);
-  const { data, isLoading, error } = useGetMentorsQuery({});
-  const mentors = data?.data || [];
+  // const { data, isLoading, error } = useGetMentorsQuery({});
+  // const mentors = data?.data || [];
   const toggleFilter = (filter) => {
     setActiveFilters((prev) =>
       prev.includes(filter)
@@ -170,8 +170,8 @@ export default function MentorSection({ page }) {
       });
     }
   };
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error?.data?.message}</div>;
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>{error?.data?.message}</div>;
 
   return (
     <div className='w-[90%] mx-auto relative mt-12'>
