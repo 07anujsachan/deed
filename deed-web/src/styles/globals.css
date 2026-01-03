@@ -111,9 +111,12 @@ body {
   border: none !important;
   padding: 0.75rem 1rem !important;
   border-radius: 0.75rem !important;
+  width: 100% !important;
 }
 .stdropdown-input{
   padding: 0 !important;
+  display: flex ;
+  align-items: center;
 }
 .stdropdown-tools{
   padding-right: 0.75rem;

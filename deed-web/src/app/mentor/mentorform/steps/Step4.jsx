@@ -9,7 +9,7 @@ import Section from "../../components/ui/Section";
 import Flex from "../../components/ui/Flex";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
 
-export default function StepFour() {
+export default function Step4() {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -40,19 +40,19 @@ export default function StepFour() {
       onNext={handleSubmit}
     >
       {/* EXPERIENCE QUESTION */}
-        <Section title='Have you mentored or guided school students before?'>
-          <Flex>
-            {EXPERIENCE_OPTIONS.map((item) => (
-              <CheckboxOption
-                key={item}
-                label={item}
-                checked={form.mentorshipMode === item}
-                onChange={() => setForm({ ...form, mentorshipMode: item })}
-                isRadio={true}
-              />
-            ))}
-          </Flex>
-        </Section>
+      <Section title='Have you mentored or guided school students before?'>
+        <Flex>
+          {EXPERIENCE_OPTIONS.map((item) => (
+            <CheckboxOption
+              key={item}
+              label={item}
+              checked={form.mentorshipMode === item}
+              onChange={() => setForm({ ...form, mentorshipMode: item })}
+              isRadio={true}
+            />
+          ))}
+        </Flex>
+      </Section>
 
       {/* STRUGGLES QUESTION */}
       <Section

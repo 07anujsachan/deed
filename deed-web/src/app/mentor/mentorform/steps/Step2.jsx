@@ -9,7 +9,7 @@ import IndustrySelector from "../../components/IndustrySelector";
 import ProfessionalForm from "../../components/ProfessionalForm";
 import StudentForm from "../../components/StudentForm";
 
-export default function StepTwo() {
+export default function Step2() {
   const router = useRouter();
 
   const [backgroundType, setBackgroundType] = useState("professional");
@@ -30,7 +30,6 @@ export default function StepTwo() {
       },
     ],
   });
-
 
   const handleSubmit = async () => {
     await fetch("/api/mentor/step-2", {

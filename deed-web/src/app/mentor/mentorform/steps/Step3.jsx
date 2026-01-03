@@ -7,7 +7,7 @@ import CheckboxOption from "../../components/ui/CheckBoxOption";
 import Flex from "../../components/ui/Flex";
 import MultiOptionWithOthers from "../../components/MultiOptionWithOthers";
 
-export default function StepFour() {
+export default function Step3() {
   const router = useRouter();
 
   const [form, setForm] = useState({

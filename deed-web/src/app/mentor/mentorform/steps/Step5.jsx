@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../components/ui/Section";
 import { Button } from "@/components/ui/PrimarySmallButton";
 
-export default function StepFive() {
+export default function Step5() {
   const router = useRouter();
 
   const [photo, setPhoto] = useState(null);

@@ -11,7 +11,7 @@ export default function ErrorMessage({ error }) {
         flex items-center gap-2
         bg-red-50 border border-red-200
         text-red-700 text-sm
-        px-3 py-2 rounded-lg
+        px-3 py-2 rounded-lg min-w-[200px]
       "
     >
       <XCircle size={16} />
