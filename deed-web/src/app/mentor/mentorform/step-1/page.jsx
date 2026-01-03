@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import { Input } from "@/components/ui/input";
@@ -8,12 +8,21 @@ import { StateSelect, CitySelect } from "react-country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 import Section from "../../components/ui/Section";
 import { ArrowRight, CheckCircle, X } from "lucide-react";
-
+import {
+  useResendVerificationEmailMutation,
+  useSendVerificationEmailMutation,
+} from "@/redux/auth/authApi";
+import PopupModal from "@/components/ui/popupModal";
+import { socket } from "@/lib/socket";
+import ErrorMessage from "@/components/ui/ErrorMessages";
 const INDIA_COUNTRY_ID = 101;
 
 export default function Page() {
   const router = useRouter();
 
+  const [sendEmail, { isLoading }] = useSendVerificationEmailMutation();
+  const [resendEmail, { isLoading: isResending }] =
+    useResendVerificationEmailMutation();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -23,7 +32,27 @@ export default function Page() {
   });
   const [email, setEmail] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
+  const [popupModalOpen, setPopupModalOpen] = useState(false);
   const [verifying, setVerifying] = useState(false);
+  const [error, setError] = useState("");
+  const [resending, setResending] = useState(false);
+
+  useEffect(() => {
+    if (!popupModalOpen || !email) return;
+
+    socket.connect();
+    socket.emit("join_email_room", email);
+
+    socket.on("email_verified", () => {
+      setPopupModalOpen(false);
+      router.push("/mentor-form");
+    });
+
+    return () => {
+      socket.off("email_verified");
+      socket.disconnect();
+    };
+  }, [popupModalOpen, email]);
 
   const handleSubmit = async () => {
     // await fetch("/api/mentor/step-1", {
@@ -38,14 +67,58 @@ export default function Page() {
     }
   };
 
+  const handleSend = async () => {
+    try {
+      setError("");
+      setVerifying(true);
+      localStorage.setItem("email", email);
+      await sendEmail({
+        email: email,
+        role: "MENTOR",
+      }).unwrap();
+
+      setPopupModalOpen(true);
+    } catch (err) {
+      setError(err?.data?.message || "Failed to send verification email");
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleResend = async () => {
+    try {
+      setError("");
+      setResending(true);
+
+      await resendEmail({
+        email: email,
+        role: "MENTOR",
+      }).unwrap();
+    } catch (err) {
+      setError(err?.data?.message || "Failed to resend verification email");
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
     <FormStepCard
       title='Basic Information'
       showPrev={false}
       onNext={handleSubmit}
     >
-      {/* EMAIL */}
+      <ErrorMessage error={error} />
+      <PopupModal
+        open={popupModalOpen}
+        onClose={() => setPopupModalOpen(false)}
+        title='Check your email'
+        description='We’ve sent a verification link to your email. Please open it and verify to continue.'
+        primaryButtonText='OK'
+        secondaryButtonText={isResending ? "Resending..." : "Resend email"}
+        onSecondaryClick={handleResend}
+      ></PopupModal>
 
+      {/* EMAIL */}
       <Section title='What is your email address'>
         <div className='flex items-center gap-3 w-full'>
           {/* INPUT WRAPPER */}
@@ -92,12 +165,7 @@ export default function Page() {
           {!emailVerified && email && (
             <button
               type='button'
-              onClick={async () => {
-                setVerifying(true);
-                await new Promise((res) => setTimeout(res, 1200));
-                setEmailVerified(true);
-                setVerifying(false);
-              }}
+              onClick={() => handleSend()}
               disabled={verifying}
               className='
           text-blue-600 font-semibold text-sm

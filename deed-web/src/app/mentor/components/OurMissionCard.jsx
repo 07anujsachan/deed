@@ -5,13 +5,13 @@ import clsx from "clsx";
 const sizeStyles = {
   sm: "w-[260px]",
   md: "w-[300px] md:w-[400px]", // ✅ DEFAULT (same as before)
-  lg: "w-[420px]",
+  lg: "w-[420px] h-auto md:h-[670px]",
 };
 
 const imageHeightStyles = {
   sm: "h-[220px]",
   md: "h-[300px] md:h-[400px]", // ✅ DEFAULT
-  lg: "h-[420px]",
+  lg: "h-[450px]",
 };
 
 const titleSizeStyles = {
@@ -46,7 +46,7 @@ export const MentorCard = ({
   return (
     <div
       className={clsx(
-        "relative flex-shrink-0 rounded-2xl",
+        "relative flex-shrink-0 rounded-2xl w-full",
         sizeStyles[size],
         variantStyles[variant],
         backgroundColor,
@@ -72,7 +72,7 @@ export const MentorCard = ({
       </div>
 
       {/* CONTENT */}
-      <div className='p-4 space-y-2'>
+      <div className='py-4 space-y-2'>
         {(name || title) && (
           <div className={`text-${align}`}>
             {name && (

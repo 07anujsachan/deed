@@ -19,7 +19,7 @@ const MentorHeader = () => {
           {/* Hide text on small screens */}
           <div className='hidden sm:block'>
             <h1 className='font-semibold text-xl text-[#111827] '>Deed</h1>
-            <p className='text-sm text-gray-500 -mt-1'>Decide your education</p>
+            <p className='text-xs text-gray-500 -mt-1 uppercase'>Solutions</p>
           </div>
         </Link>
       </div>
