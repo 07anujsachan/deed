@@ -64,6 +64,16 @@ export const mentorApi = createApi({
     getMentorProfile: builder.query({
       query: (mentorId) => `/mentors/${mentorId}`,
     }),
+
+    /* =========================
+       MENTOR LIST
+    ========================= */
+    getMentors: builder.query({
+      query: () => ({
+        url: "/mentors",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -75,4 +85,5 @@ export const {
   useSaveStep4Mutation,
   useSaveStep5Mutation,
   useGetMentorProfileQuery,
+  useGetMentorsQuery,
 } = mentorApi;

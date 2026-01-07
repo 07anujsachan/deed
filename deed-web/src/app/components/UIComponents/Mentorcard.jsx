@@ -16,7 +16,7 @@ const MentorCard = ({
 
   return (
     <div
-      className='bg-white rounded-2xl  h-[540px]  shadow-md p-4 w-full max-w-xs border cursor-pointer'
+      className='bg-white rounded-2xl  h-[540px]  p-4 w-full max-w-xs border cursor-pointer'
       onClick={() => (
         router.push(`/mentordetail/${_id}`), setIsExpanded(!isExpanded)
       )}

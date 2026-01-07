@@ -1,18 +1,25 @@
 "use client";
-import { useGetSingleMentorQuery } from "@/features/mentor/mentorApiSlice";
+import Loader from "@/components/ui/Loader";
+import { useGetMentorProfileQuery } from "@/redux/mentor/mentorApi";
 import { CalendarClock, Headphones } from "lucide-react";
 import React, { useState } from "react";
-
 export default function MentorDetailPage({ params }) {
   const { mentorId } = React.use(params);
-  console.log(mentorId);
-  const { data, isLoading, isError } = useGetSingleMentorQuery(mentorId);
+  const { data, isLoading, isError } = useGetMentorProfileQuery(mentorId);
   const [activeTab, setActiveTab] = useState("Overview"); // default tab
 
-  const mentor = data?.data;
-  console.log(mentor);
+  const mentor = data?.data; // Backend returns { mentor: ... } or similar, checking response structure locally first is redundant as per plan, assuming standard wrapper
 
-  if (isLoading) return <p className='text-center'>Loading mentor...</p>;
+  // NOTE: Based on route.js provided earlier, GET /mentors returns { mentors }, need to verify GET /mentors/:id structure.
+  // Assuming GET /mentors/:id returns { mentor } or just the object.
+  // Let's assume standard { mentor } wrapper based on previous interactions.
+
+  if (isLoading)
+    return (
+      <div className='w-full h-screen flex items-center justify-center'>
+        <Loader />
+      </div>
+    );
 
   if (isError) return <p className='text-center'>Error loading mentor</p>;
 
@@ -24,7 +31,7 @@ export default function MentorDetailPage({ params }) {
           <div className='max-w-6xl mx-auto px-6 py-12 flex items-center gap-8'>
             {/* Profile Image */}
             <img
-              src={mentor?.photo}
+              src={mentor?.avatar?.url || "/media/anuj.jpg"}
               alt='loading'
               className='w-[300px] h-[300px] rounded-full'
             />
@@ -33,11 +40,13 @@ export default function MentorDetailPage({ params }) {
             <div className='flex justify-between w-full items-center'>
               <div className='flex-1 '>
                 <h1 className='text-2xl font-bold text-gray-900 capitalize'>
-                  {mentor?.fullName}
+                  {mentor?.basicInfo?.fullName}
                 </h1>
                 <p className='text-lg text-gray-700'>
-                  {/* UI Designer at Tata Digital */}
-                  {mentor?.profession}
+                  {mentor?.background?.type === "professional"
+                    ? `${mentor?.background?.professional?.occupation} at ${mentor?.background?.professional?.company}`
+                    : mentor?.background?.student?.[0]?.educationLevel ||
+                      "Student"}
                 </p>
               </div>
 
@@ -116,10 +125,11 @@ export default function MentorDetailPage({ params }) {
                   <ul className='space-y-1 text-sm text-gray-700'>
                     <li>
                       <span className='font-medium mr-1 '>Expertise:</span>
-                      {mentor?.expertise.map((tag, index) => (
+                      {mentor?.mentorship?.topics?.map((tag, index) => (
                         <span key={index} className='capitalize'>
                           {tag}
-                          {index !== mentor?.expertise.length - 1 && ","}{" "}
+                          {index !== mentor?.mentorship?.topics?.length - 1 &&
+                            ","}{" "}
                         </span>
                       ))}
                     </li>
@@ -129,10 +139,12 @@ export default function MentorDetailPage({ params }) {
                     </li>
                     <li>
                       <span className='font-medium'>Language:</span>{" "}
-                      {mentor?.languages.map((language, index) => (
+                      {mentor?.mentorship?.languages?.map((language, index) => (
                         <span key={index} className='capitalize'>
                           {language}
-                          {index !== mentor?.languages.length - 1 && ","}{" "}
+                          {index !==
+                            mentor?.mentorship?.languages?.length - 1 &&
+                            ","}{" "}
                         </span>
                       ))}
                     </li>
@@ -176,16 +188,21 @@ export default function MentorDetailPage({ params }) {
                     Education
                   </h2>
 
-                  {mentor?.education?.length > 0 ? (
-                    mentor.education.map((edu, index) => (
+                  {mentor?.background?.student?.length > 0 ? (
+                    mentor.background.student.map((edu, index) => (
                       <p key={index} className='text-sm text-gray-700'>
-                        {edu.level
-                          ? `${edu.level[0].toUpperCase()}${edu.level.slice(1)}`
-                          : "Education"}
-                        {edu.subject ? ` in ${edu.subject}` : ""},
+                        {edu.educationLevel || "Education"}
+                        {edu.fieldOfStudy ? ` in ${edu.fieldOfStudy}` : ""},
                         {edu.institution ? ` ${edu.institution}` : ""}
                       </p>
                     ))
+                  ) : mentor?.background?.professional?.length > 0 ? ( // Actually professional is an object in schema, checking if exists
+                    <div className='text-sm text-gray-700'>
+                      <p className='font-medium'>
+                        {mentor.background.professional.occupation}
+                      </p>
+                      <p>{mentor.background.professional.company}</p>
+                    </div>
                   ) : (
                     <p className='text-sm text-gray-500 italic'>
                       No education details provided

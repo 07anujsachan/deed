@@ -3,8 +3,9 @@ import { useState, useRef } from "react";
 import { Button } from "../../components/ui/PrimarySmallButton";
 import MentorCard from "./UIComponents/Mentorcard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-// import { useGetMentorsQuery } from "@/features/mentor/mentorApiSlice";
+import { useGetMentorsQuery } from "@/redux/mentor/mentorApi";
 import { useRouter } from "next/navigation";
+import Loader from "../../components/ui/Loader";
 
 // Dummy mentors data (all same image + master added in education)
 const mentors = [
@@ -141,8 +142,9 @@ export default function MentorSection({ page }) {
   const [activeFilters, setActiveFilters] = useState([]);
   const filterScrollRef = useRef(null);
   const cardScrollRef = useRef(null);
-  // const { data, isLoading, error } = useGetMentorsQuery({});
-  // const mentors = data?.data || [];
+  const router = useRouter();
+  const { data, isLoading } = useGetMentorsQuery({});
+  const mentors = data?.data || [];
   const toggleFilter = (filter) => {
     setActiveFilters((prev) =>
       prev.includes(filter)
@@ -150,12 +152,11 @@ export default function MentorSection({ page }) {
         : [...prev, filter]
     );
   };
-
   const filteredMentors =
     activeFilters.length === 0
       ? mentors
       : mentors.filter((m) =>
-          m.expertise.some((cat) =>
+          m.mentorship?.topics?.some((cat) =>
             activeFilters
               .map((f) => f.toLowerCase())
               .includes(cat.toLowerCase())
@@ -172,6 +173,14 @@ export default function MentorSection({ page }) {
   };
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>{error?.data?.message}</div>;
+
+  if (isLoading) {
+    return (
+      <div className='w-[90%] mx-auto mt-12'>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className='w-[90%] mx-auto relative mt-12'>
@@ -232,15 +241,50 @@ export default function MentorSection({ page }) {
           className='flex gap-4 scroll-pl-4 snap-x snap-mandatory overflow-x-auto scrollbar-hide'
           style={{ scrollBehavior: "smooth" }}
         >
-          {filteredMentors.map((mentor, index) => (
-            <div
-              key={index}
-              className='snap-start shrink-0'
-              style={{ width: "300px" }} // fixed card width
-            >
-              <MentorCard {...mentor} education={mentor.education.slice(-2)} />
-            </div>
-          ))}
+          {filteredMentors.map((mentor, index) => {
+            // Map backend data to frontend format
+            const educationData =
+              mentor.background?.type === "student"
+                ? mentor.background.student?.map((edu) => ({
+                    subject: edu.fieldOfStudy || edu.educationLevel,
+                    institution: edu.institution,
+                  })) || []
+                : mentor.background?.professional
+                ? [
+                    {
+                      subject:
+                        mentor.background.professional.occupation ||
+                        "Professional",
+                      institution:
+                        mentor.background.professional.company ||
+                        mentor.background.professional.experience,
+                    },
+                  ]
+                : [];
+
+            const mappedMentor = {
+              _id: mentor._id,
+              photo: mentor.avatar?.url || "/media/anuj.jpg", // Fallback image
+              fullName: mentor.basicInfo?.fullName || "Mentor",
+              profession:
+                mentor.background?.type === "professional"
+                  ? mentor.background.professional?.occupation
+                  : mentor.background?.student?.[0]?.educationLevel ||
+                    "Student",
+              expertise: mentor.mentorship?.topics || [],
+              education: educationData.slice(0, 2), // Show top 2 education items
+            };
+
+            return (
+              <div
+                key={mentor._id || index}
+                className='snap-start shrink-0'
+                style={{ width: "300px" }} // fixed card width
+              >
+                <MentorCard {...mappedMentor} />
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -249,7 +293,7 @@ export default function MentorSection({ page }) {
         <div className='mt-8 flex justify-between items-center'>
           <button
             onClick={() => scroll("left")}
-            className='  p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold'
+            className='p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold'
           >
             <ChevronLeft size={24} />
           </button>
@@ -257,7 +301,7 @@ export default function MentorSection({ page }) {
           <Button
             text='See All Mentors'
             variant='PrimarySmallOutlinedButton'
-            onClick={() => useRouter().push("/mentors")}
+            onClick={() => router.push("/mentors")}
             className='md:ml-6 md:text-xl text-sm '
           />
 
