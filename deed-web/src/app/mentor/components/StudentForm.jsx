@@ -29,11 +29,16 @@ export default function StudentForm({ form, setForm }) {
     setForm({ ...form, education: updated });
   };
 
-  const updateEducation = (index, key, value) => {
-    const updated = [...education];
-    updated[index][key] = value;
-    setForm({ ...form, education: updated });
-  };
+const updateEducation = (index, key, value) => {
+  const updated = education.map((item, i) =>
+    i === index
+      ? { ...item, [key]: value } // ✅ new object
+      : item
+  );
+
+  setForm({ ...form, education: updated });
+};
+
 
   return (
     <div className='space-y-8'>
@@ -90,14 +95,14 @@ export default function StudentForm({ form, setForm }) {
               placeholder='From'
               value={edu.from}
               onChange={(e) => updateEducation(index, "from", e.target.value)}
-              options={yearOptions()}
+              options={yearOptions("from")}
             />
 
             <SelectField
               placeholder='To'
               value={edu.to}
               onChange={(e) => updateEducation(index, "to", e.target.value)}
-              options={yearOptions()}
+              options={yearOptions("to")}
             />
           </div>
         </div>
@@ -116,11 +121,17 @@ export default function StudentForm({ form, setForm }) {
 }
 
 /* Utility: year list */
-function yearOptions() {
+function yearOptions(type) {
   const currentYear = new Date().getFullYear();
   const years = [];
-  for (let i = currentYear; i >= 1980; i--) {
-    years.push({ label: String(i), value: String(i) });
+  if(type === "from") {
+    for (let i = currentYear; i >= 1980; i--) {
+      years.push({ label: String(i), value: String(i) });
+    }
+  } else {
+    for (let i = currentYear + 4; i >= 1980; i--) {
+      years.push({ label: String(i), value: String(i) });
+    }
   }
   return years;
 }

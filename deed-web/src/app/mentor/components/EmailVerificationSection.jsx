@@ -102,9 +102,6 @@ export default function EmailVerificationSection({
         role: "MENTOR",
       }).unwrap();
 
-      // We don't necessarily need to store in localStorage if Step1 handles it,
-      // but keeping it doesn't hurt as a backup
-      localStorage.setItem("mentor_email", email);
       setShowOtpModal(true);
       setTimer(60);
     } catch (err) {

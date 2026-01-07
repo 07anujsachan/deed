@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import { Input } from "@/components/ui/input";
@@ -8,20 +8,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 import IndustrySelector from "../../components/IndustrySelector";
 import ProfessionalForm from "../../components/ProfessionalForm";
 import StudentForm from "../../components/StudentForm";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData } from "@/redux/mentor/mentorSlice";
 import { useSaveStep2Mutation } from "@/redux/mentor/mentorApi";
+import { AlertCircle } from "lucide-react";
 
 export default function Step2() {
   const router = useRouter();
 
-  const [backgroundType, setBackgroundType] = useState("professional");
+  const dispatch = useDispatch();
+  const storedFormData = useSelector((state) => state.mentor.formData);
+
+  const [backgroundType, setBackgroundType] = useState(
+    storedFormData?.backgroundType || "professional"
+  );
 
   const [form, setForm] = useState({
-    occupation: "",
-    company: "",
-    experience: "",
-    industry: [],
-    socials: [],
-    education: [
+    occupation: storedFormData?.occupation || "",
+    company: storedFormData?.company || "",
+    experience: storedFormData?.experience || "",
+    industry: storedFormData?.industry || [],
+    socials: storedFormData?.socials || [],
+    education: storedFormData?.education || [
       {
         level: "",
         field: "",
@@ -32,7 +40,12 @@ export default function Step2() {
     ],
   });
 
-  const [saveStep2] = useSaveStep2Mutation();
+  // Sync to Redux
+  useEffect(() => {
+    dispatch(updateFormData({ backgroundType, ...form }));
+  }, [backgroundType, form, dispatch]);
+
+  const [saveStep2, { error: saveError, isLoading }] = useSaveStep2Mutation();
 
   const handleSubmit = async () => {
     try {
@@ -51,7 +64,18 @@ export default function Step2() {
       title='Professional Background'
       onPrev={() => router.push("/mentor/mentorform/step-1")}
       onNext={handleSubmit}
+      isLoading={isLoading}
     >
+      {/* ERROR MESSAGE */}
+      {saveError && (
+        <div className='bg-red-50 text-red-600 p-3 rounded-lg flex items-center gap-2 mb-4 text-sm'>
+          <AlertCircle size={16} />
+          <span>
+            {saveError?.data?.message ||
+              "Something went wrong. Please try again."}
+          </span>
+        </div>
+      )}
       {/* BACKGROUND TYPE */}
       <div className='flex gap-6'>
         <label className='flex items-center gap-2 cursor-pointer'>

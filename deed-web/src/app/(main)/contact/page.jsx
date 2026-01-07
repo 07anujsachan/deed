@@ -9,7 +9,7 @@ import {
   PhoneCall,
   Twitter,
 } from "lucide-react";
-import { Button } from "../components/UIComponents/PrimarySmallButton";
+import { Button } from "@/components/ui/button";
 
 const contactData = [
   { label: "+91-34567890", Icon: PhoneCall },

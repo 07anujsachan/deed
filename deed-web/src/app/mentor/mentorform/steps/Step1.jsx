@@ -10,6 +10,7 @@ import Section from "../../components/ui/Section";
 import EmailVerificationSection from "../../components/EmailVerificationSection";
 import { useSaveStep1Mutation } from "@/redux/mentor/mentorApi";
 import { updateFormData } from "@/redux/mentor/mentorSlice";
+import { AlertCircle } from "lucide-react";
 
 const INDIA_COUNTRY_ID = 101;
 
@@ -49,7 +50,7 @@ export default function Step1() {
     dispatch(updateFormData({ [field]: value }));
   };
 
-  const [saveStep1] = useSaveStep1Mutation();
+  const [saveStep1, { error: saveError, isLoading }] = useSaveStep1Mutation();
 
   const handleNext = async () => {
     if (!emailVerified) return;
@@ -67,7 +68,18 @@ export default function Step1() {
       showPrev={false}
       onNext={handleNext}
       nextDisabled={!emailVerified}
+      isLoading={isLoading}
     >
+      {/* ERROR MESSAGE */}
+      {saveError && (
+        <div className='bg-red-50 text-red-600 p-3 rounded-lg flex items-center gap-2 mb-4 text-sm'>
+          <AlertCircle size={16} />
+          <span>
+            {saveError?.data?.message ||
+              "Something went wrong. Please try again."}
+          </span>
+        </div>
+      )}
       {/* EMAIL VERIFICATION */}
       <EmailVerificationSection
         initialEmail={form.email}

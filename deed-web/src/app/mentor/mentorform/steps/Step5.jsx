@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,10 @@ import { Upload, Trash2, Loader, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../components/ui/Section";
 import { Button } from "@/components/ui/PrimarySmallButton";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData, resetForm } from "@/redux/mentor/mentorSlice";
 import { useSaveStep5Mutation } from "@/redux/mentor/mentorApi";
+import { AlertCircle } from "lucide-react";
 
 export default function Step5() {
   const router = useRouter();
@@ -19,13 +22,21 @@ export default function Step5() {
   const [uploading, setUploading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  const dispatch = useDispatch();
+  const storedFormData = useSelector((state) => state.mentor.formData);
+
   const [form, setForm] = useState({
-    about: "",
-    agreements: {
+    about: storedFormData?.about || "",
+    agreements: storedFormData?.agreements || {
       respectful: false,
       consent: false,
     },
   });
+
+  // Sync to Redux
+  useEffect(() => {
+    dispatch(updateFormData(form));
+  }, [form, dispatch]);
 
   /* ---------- PHOTO HANDLERS ---------- */
 
@@ -48,7 +59,7 @@ export default function Step5() {
     setShowDeleteModal(false);
   };
 
-  const [saveStep5] = useSaveStep5Mutation();
+  const [saveStep5, { error: saveError, isLoading }] = useSaveStep5Mutation();
 
   const handleSubmit = async () => {
     if (!form.agreements.respectful || !form.agreements.consent) return;
@@ -74,7 +85,18 @@ export default function Step5() {
       onPrev={() => router.push("/mentor/mentorform/step-4")}
       onNext={handleSubmit}
       nextLabel='Submit'
+      isLoading={isLoading}
     >
+      {/* ERROR MESSAGE */}
+      {saveError && (
+        <div className='bg-red-50 text-red-600 p-3 rounded-lg flex items-center gap-2 mb-4 text-sm'>
+          <AlertCircle size={16} />
+          <span>
+            {saveError?.data?.message ||
+              "Something went wrong. Please try again."}
+          </span>
+        </div>
+      )}
       {/* PROFILE PHOTO */}
       <Section title='Upload a profile photo (optional)'>
         <div className='flex items-center gap-4'>

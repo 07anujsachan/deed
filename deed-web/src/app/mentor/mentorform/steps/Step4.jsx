@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,15 +8,26 @@ import { Input } from "@/components/ui/input";
 import Section from "../../components/ui/Section";
 import Flex from "../../components/ui/Flex";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData } from "@/redux/mentor/mentorSlice";
 import { useSaveStep4Mutation } from "@/redux/mentor/mentorApi";
+import { AlertCircle } from "lucide-react";
 
 export default function Step4() {
   const router = useRouter();
 
+  const dispatch = useDispatch();
+  const storedFormData = useSelector((state) => state.mentor.formData);
+
   const [form, setForm] = useState({
-    mentoringExperience: "",
-    studentStruggles: "",
+    mentoringExperience: storedFormData?.mentoringExperience || "",
+    studentStruggles: storedFormData?.studentStruggles || "",
   });
+
+  // Sync to Redux
+  useEffect(() => {
+    dispatch(updateFormData(form));
+  }, [form, dispatch]);
 
   const EXPERIENCE_OPTIONS = [
     "Yes, as part of a program",
@@ -24,7 +35,7 @@ export default function Step4() {
     "No, but I’d love to start",
   ];
 
-  const [saveStep4] = useSaveStep4Mutation();
+  const [saveStep4, { error: saveError, isLoading }] = useSaveStep4Mutation();
 
   const handleSubmit = async () => {
     try {
@@ -40,7 +51,18 @@ export default function Step4() {
       title='Motivation & Experience'
       onPrev={() => router.push("/mentor/mentorform/step-3")}
       onNext={handleSubmit}
+      isLoading={isLoading}
     >
+      {/* ERROR MESSAGE */}
+      {saveError && (
+        <div className='bg-red-50 text-red-600 p-3 rounded-lg flex items-center gap-2 mb-4 text-sm'>
+          <AlertCircle size={16} />
+          <span>
+            {saveError?.data?.message ||
+              "Something went wrong. Please try again."}
+          </span>
+        </div>
+      )}
       {/* EXPERIENCE QUESTION */}
       <Section title='Have you mentored or guided school students before?'>
         <Flex>
@@ -48,8 +70,8 @@ export default function Step4() {
             <CheckboxOption
               key={item}
               label={item}
-              checked={form.mentorshipMode === item}
-              onChange={() => setForm({ ...form, mentorshipMode: item })}
+              checked={form.mentoringExperience === item}
+              onChange={() => setForm({ ...form, mentoringExperience: item })}
               isRadio={true}
             />
           ))}

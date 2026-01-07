@@ -2,8 +2,14 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { setMentorSession, updateFormData } from "@/redux/mentor/mentorSlice";
+import { RotateCcw } from "lucide-react";
+import {
+  setMentorSession,
+  updateFormData,
+  resetForm,
+} from "@/redux/mentor/mentorSlice";
 
 const STORAGE_KEY = "mentor_form_data";
 const EXPIRY_HOURS = 24;
@@ -31,15 +37,29 @@ export default function MentorFormLayout({ children }) {
           // Valid: Hydrate Redux
           dispatch(updateFormData(data));
         } else {
-          // Expired: Clear Storage
           localStorage.removeItem(STORAGE_KEY);
         }
       } catch (e) {
-        console.error("Failed to parse mentor form storage", e);
         localStorage.removeItem(STORAGE_KEY);
       }
     }
   }, [dispatch]);
+
+  /* ============================
+     RESET HANDLING
+  ============================ */
+  const router = useRouter();
+  const handleReset = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to reset the form? All progress will be lost."
+      )
+    ) {
+      dispatch(resetForm());
+      localStorage.removeItem(STORAGE_KEY);
+      router.push("/mentor/mentorform/step-1");
+    }
+  };
 
   // 2. Save to LocalStorage on Redux Change
   useEffect(() => {
@@ -56,7 +76,16 @@ export default function MentorFormLayout({ children }) {
      UI LAYOUT (UNCHANGED)
   ============================ */
   return (
-    <section>
+    <section className='relative'>
+      {/* RESET BUTTON */}
+      <button
+        onClick={handleReset}
+        className='absolute top-4 right-4 md:top-8 md:right-16 z-50 flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-red-600 transition-colors bg-white/80 backdrop-blur px-3 py-2 rounded-lg shadow-sm'
+      >
+        <RotateCcw size={16} />
+        Reset Form
+      </button>
+
       <div className='w-full bg-[#E9EAFE] px-6 md:px-16 pt-12 md:pt-20 pb-32 md:pb-40'>
         <div className='flex flex-col md:flex-row items-center justify-between gap-10'>
           {/* LEFT CONTENT */}

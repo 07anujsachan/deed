@@ -1,25 +1,36 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FormStepCard from "../../components/FormStepCard";
 import Section from "../../components/ui/Section";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
 import Flex from "../../components/ui/Flex";
 import MultiOptionWithOthers from "../../components/MultiOptionWithOthers";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData } from "@/redux/mentor/mentorSlice";
 import { useSaveStep3Mutation } from "@/redux/mentor/mentorApi";
+import { AlertCircle } from "lucide-react";
 
 export default function Step3() {
   const router = useRouter();
 
+  const dispatch = useDispatch();
+  const storedFormData = useSelector((state) => state.mentor.formData);
+
   const [form, setForm] = useState({
-    subjects: [],
-    sessionFrequency: "",
-    mentorshipMode: "",
-    languages: [],
-    otherLanguages: "",
+    subjects: storedFormData?.subjects || [],
+    sessionFrequency: storedFormData?.sessionFrequency || "",
+    mentorshipMode: storedFormData?.mentorshipMode || "",
+    languages: storedFormData?.languages || [],
+    otherLanguages: storedFormData?.otherLanguages || "",
   });
 
-  const [saveStep3] = useSaveStep3Mutation();
+  // Sync to Redux
+  useEffect(() => {
+    dispatch(updateFormData(form));
+  }, [form, dispatch]);
+
+  const [saveStep3, { error: saveError, isLoading }] = useSaveStep3Mutation();
 
   const handleSubmit = async () => {
     try {
@@ -35,7 +46,18 @@ export default function Step3() {
       title='Mentorship Preferences'
       onPrev={() => router.push("/mentor/mentorform/step-2")}
       onNext={handleSubmit}
+      isLoading={isLoading}
     >
+      {/* ERROR MESSAGE */}
+      {saveError && (
+        <div className='bg-red-50 text-red-600 p-3 rounded-lg flex items-center gap-2 mb-4 text-sm'>
+          <AlertCircle size={16} />
+          <span>
+            {saveError?.data?.message ||
+              "Something went wrong. Please try again."}
+          </span>
+        </div>
+      )}
       {/* SUBJECTS */}
       <Section title='Which subjects or career paths can you guide students about?'>
         <MultiOptionWithOthers
