@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import Section from "../../components/ui/Section";
 import Flex from "../../components/ui/Flex";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
+import { useSaveStep4Mutation } from "@/redux/mentor/mentorApi";
 
 export default function Step4() {
   const router = useRouter();
@@ -23,14 +24,15 @@ export default function Step4() {
     "No, but I’d love to start",
   ];
 
-  const handleSubmit = async () => {
-    // 🔥 backend save
-    await fetch("/api/mentor/step-4", {
-      method: "POST",
-      body: JSON.stringify(form),
-    });
+  const [saveStep4] = useSaveStep4Mutation();
 
-    router.push("/mentor/mentorform/step-5");
+  const handleSubmit = async () => {
+    try {
+      await saveStep4(form).unwrap();
+      router.push("/mentor/mentorform/step-5");
+    } catch (error) {
+      console.error("Step 4 save failed", error);
+    }
   };
 
   return (

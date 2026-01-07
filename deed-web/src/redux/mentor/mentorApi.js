@@ -10,7 +10,7 @@ export const mentorApi = createApi({
     ========================= */
     getMentorFormSession: builder.query({
       query: () => ({
-        url: "/mentor/form/session",
+        url: "/mentors/form/session",
         method: "GET",
       }),
     }),
@@ -20,7 +20,7 @@ export const mentorApi = createApi({
     ========================= */
     saveStep1: builder.mutation({
       query: (data) => ({
-        url: "/mentor/form/step1",
+        url: "/mentors/form/step1",
         method: "POST",
         body: data,
       }),
@@ -28,7 +28,7 @@ export const mentorApi = createApi({
 
     saveStep2: builder.mutation({
       query: (data) => ({
-        url: "/mentor/form/step2",
+        url: "/mentors/form/step2",
         method: "POST",
         body: data,
       }),
@@ -36,7 +36,7 @@ export const mentorApi = createApi({
 
     saveStep3: builder.mutation({
       query: (data) => ({
-        url: "/mentor/form/step3",
+        url: "/mentors/form/step3",
         method: "POST",
         body: data,
       }),
@@ -44,7 +44,7 @@ export const mentorApi = createApi({
 
     saveStep4: builder.mutation({
       query: (data) => ({
-        url: "/mentor/form/step4",
+        url: "/mentors/form/step4",
         method: "POST",
         body: data,
       }),
@@ -52,7 +52,7 @@ export const mentorApi = createApi({
 
     saveStep5: builder.mutation({
       query: (data) => ({
-        url: "/mentor/form/step5",
+        url: "/mentors/form/step5",
         method: "POST",
         body: data,
       }),
@@ -62,7 +62,7 @@ export const mentorApi = createApi({
        PROFILE
     ========================= */
     getMentorProfile: builder.query({
-      query: (mentorId) => `/mentor/${mentorId}`,
+      query: (mentorId) => `/mentors/${mentorId}`,
     }),
   }),
 });

@@ -12,11 +12,6 @@ export default function VerifyEmailPage() {
   const [verifyEmail, { isLoading }] = useLazyVerifyEmailQuery();
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-
     verifyEmail(token)
       .unwrap()
       .then(() => {

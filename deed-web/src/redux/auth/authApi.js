@@ -25,9 +25,24 @@ export const authApi = createApi({
       }),
     }),
 
+    verifyOtp: builder.mutation({
+      query: ({ email, otp, role }) => ({
+        url: "/auth/verify-email",  
+        method: "POST",
+        body: { email, otp, role },
+      }),
+    }),
+
     verifyEmail: builder.query({
-      query: (token) => ({
-        url: `/auth/verify-email?token=${token}`,
+      query: () => ({
+        url: `/auth/verify-email`,
+        method: "GET",
+      }),
+    }),
+
+    checkEmailVerified: builder.query({
+      query: () => ({
+        url: `/auth/check-email-verified`,
         method: "GET",
       }),
     }),
@@ -56,8 +71,10 @@ export const authApi = createApi({
 export const {
   useSendVerificationEmailMutation,
   useResendVerificationEmailMutation,
+  useVerifyOtpMutation,
   useVerifyEmailQuery,
   useLazyVerifyEmailQuery,
+  useLazyCheckEmailVerifiedQuery,
   useLoginMutation,
   useLogoutMutation,
 } = authApi;

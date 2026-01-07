@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import IndustrySelector from "../../components/IndustrySelector";
 import ProfessionalForm from "../../components/ProfessionalForm";
 import StudentForm from "../../components/StudentForm";
+import { useSaveStep2Mutation } from "@/redux/mentor/mentorApi";
 
 export default function Step2() {
   const router = useRouter();
@@ -31,16 +32,18 @@ export default function Step2() {
     ],
   });
 
+  const [saveStep2] = useSaveStep2Mutation();
+
   const handleSubmit = async () => {
-    await fetch("/api/mentor/step-2", {
-      method: "POST",
-      body: JSON.stringify({
+    try {
+      await saveStep2({
         backgroundType,
         ...form,
-      }),
-    });
-
-    router.push("/mentor/mentorform/step-3");
+      }).unwrap();
+      router.push("/mentor/mentorform/step-3");
+    } catch (error) {
+      console.error("Step 2 save failed", error);
+    }
   };
 
   return (

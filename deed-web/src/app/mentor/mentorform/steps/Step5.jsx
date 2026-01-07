@@ -9,6 +9,7 @@ import { Upload, Trash2, Loader, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Section from "../../components/ui/Section";
 import { Button } from "@/components/ui/PrimarySmallButton";
+import { useSaveStep5Mutation } from "@/redux/mentor/mentorApi";
 
 export default function Step5() {
   const router = useRouter();
@@ -47,6 +48,8 @@ export default function Step5() {
     setShowDeleteModal(false);
   };
 
+  const [saveStep5] = useSaveStep5Mutation();
+
   const handleSubmit = async () => {
     if (!form.agreements.respectful || !form.agreements.consent) return;
 
@@ -55,12 +58,14 @@ export default function Step5() {
     payload.append("about", form.about);
     payload.append("agreements", JSON.stringify(form.agreements));
 
-    // await fetch("/api/mentor/submit", {
-    //   method: "POST",
-    //   body: payload,
-    // });
-
-    router.push("/mentor/thank-you");
+    try {
+      await saveStep5(payload).unwrap();
+      dispatch(resetForm());
+      localStorage.removeItem("mentor_form_data");
+      router.push("/mentor/thank-you");
+    } catch (error) {
+      console.error("Step 5 save failed", error);
+    }
   };
 
   return (

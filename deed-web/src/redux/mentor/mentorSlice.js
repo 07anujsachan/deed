@@ -11,10 +11,19 @@ const mentorSlice = createSlice({
     setMentorSession(state, action) {
       state.currentStep = action.payload.currentStep;
       state.formData = action.payload.data || {};
-      state.isVerified = true;
+      state.isVerified = action.payload.isVerified;
+    },
+    updateFormData(state, action) {
+      state.formData = { ...state.formData, ...action.payload };
+    },
+    resetForm(state) {
+      state.currentStep = 1;
+      state.formData = {};
+      state.isVerified = false;
     },
   },
 });
 
-export const { setMentorSession } = mentorSlice.actions;
+export const { setMentorSession, updateFormData, resetForm } =
+  mentorSlice.actions;
 export default mentorSlice.reducer;

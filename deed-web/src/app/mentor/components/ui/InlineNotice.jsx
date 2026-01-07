@@ -13,12 +13,15 @@ export default function InlineNotice({
     secondary: {
       wrapper: "bg-blue-50 text-blue-700",
     },
+    primaryFill : {
+      wrapper: "bg-green-700 text-green-50",
+    }
   };
 
   return (
     <div
       className={cn(
-        "mt-2 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-medium",
+        "mt-2 inline-flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-medium",
         styles[variant].wrapper
       )}
     >

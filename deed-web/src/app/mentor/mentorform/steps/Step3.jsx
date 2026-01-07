@@ -6,6 +6,7 @@ import Section from "../../components/ui/Section";
 import CheckboxOption from "../../components/ui/CheckBoxOption";
 import Flex from "../../components/ui/Flex";
 import MultiOptionWithOthers from "../../components/MultiOptionWithOthers";
+import { useSaveStep3Mutation } from "@/redux/mentor/mentorApi";
 
 export default function Step3() {
   const router = useRouter();
@@ -18,16 +19,15 @@ export default function Step3() {
     otherLanguages: "",
   });
 
-  const handleSubmit = async () => {
-    // await fetch("/api/mentor/step-2", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     backgroundType,
-    //     ...form,
-    //   }),
-    // });
+  const [saveStep3] = useSaveStep3Mutation();
 
-    router.push("/mentor/mentorform/step-4");
+  const handleSubmit = async () => {
+    try {
+      await saveStep3(form).unwrap();
+      router.push("/mentor/mentorform/step-4");
+    } catch (error) {
+      console.error("Step 3 save failed", error);
+    }
   };
 
   return (

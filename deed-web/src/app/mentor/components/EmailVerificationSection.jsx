@@ -1,107 +1,182 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, CheckCircle, MailWarning, X } from "lucide-react";
+import {
+  ArrowRight,
+  Bell,
+  CheckCircle,
+  MailCheck,
+  MailWarning,
+  X,
+} from "lucide-react";
 
-import { socket } from "@/lib/socket";
 import {
   useSendVerificationEmailMutation,
-  useResendVerificationEmailMutation,
+  useVerifyOtpMutation,
+  useLazyCheckEmailVerifiedQuery,
 } from "@/redux/auth/authApi";
+
 import { Input } from "@/components/ui/input";
 import InlineNotice from "./ui/InlineNotice";
 import Section from "./ui/Section";
 import ErrorMessage from "@/components/ui/ErrorMessages";
+import PopupModal from "@/components/ui/popupModal";
 
-export default function EmailVerificationSection({ onVerified }) {
-  const [email, setEmail] = useState("");
+export default function EmailVerificationSection({
+  onVerified,
+  initialEmail,
+  onEmailChange,
+}) {
+  const [email, setEmail] = useState(initialEmail || "");
   const [emailVerified, setEmailVerified] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
-  const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
+
+  // OTP Modal State
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [timer, setTimer] = useState(0);
+  const [timerInterval, setTimerInterval] = useState(null);
 
   const [sendEmail, { isLoading: sending }] =
     useSendVerificationEmailMutation();
-  const [resendEmail] = useResendVerificationEmailMutation();
+  const [verifyOtp, { isLoading: verifying }] = useVerifyOtpMutation();
 
-  /* SOCKET AUTO-VERIFY */
+  const [checkEmailVerified] = useLazyCheckEmailVerifiedQuery();
+
+  // Sync prop changes to local state
   useEffect(() => {
-    if (!email) return;
+    if (initialEmail !== undefined) {
+      setEmail(initialEmail);
+    }
+  }, [initialEmail]);
 
-    socket.connect();
-    socket.emit("join_email_room", email);
-
-    socket.on("email_verified", () => {
-      setEmailVerified(true);
-      onVerified(email);
-    });
-
-    return () => {
-      socket.off("email_verified");
-      socket.disconnect();
+  useEffect(() => {
+    // Check verification status on load
+    const checkStatus = async () => {
+      try {
+        // If user is logged on or has a session, this might return true
+        // The API checkEmailVerified() takes no args now (based on user change), relies on cookie/session?
+        const res = await checkEmailVerified().unwrap();
+        if (res?.data?.emailVerified) {
+          setEmailVerified(true);
+          setEmail(res?.data?.email);
+          onEmailChange?.(res?.data?.email);
+          onVerified?.(res?.data);
+        }
+      } catch (ignored) {
+        // It's okay if check fails, user might not be verified
+      }
     };
-  }, [email, onVerified]);
 
-  const handleSendEmail = async () => {
+    checkStatus();
+  }, []);
+
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+      setTimerInterval(interval);
+      return () => clearInterval(interval);
+    } else if (timer === 0 && timerInterval) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+    }
+  }, [timer]);
+
+  const handleEmailChange = (e) => {
+    const newVal = e.target.value;
+    setEmail(newVal);
+    setEmailVerified(false);
+    onEmailChange?.(newVal);
+  };
+
+  /* ===============================
+     SEND OTP
+  =============================== */
+  const handleSendOtp = async () => {
     try {
       setError("");
-      await sendEmail({ email, role: "MENTOR" }).unwrap();
-      setEmailSent(true);
+      await sendEmail({
+        email,
+        role: "MENTOR",
+      }).unwrap();
+
+      // We don't necessarily need to store in localStorage if Step1 handles it,
+      // but keeping it doesn't hurt as a backup
+      localStorage.setItem("mentor_email", email);
+      setShowOtpModal(true);
+      setTimer(60);
     } catch (err) {
-      setError(err?.data?.message || "Failed to send verification email");
+      setError(err?.data?.message || "Failed to send OTP");
     }
   };
 
-  const handleCheckVerification = async () => {
+  /* ===============================
+     VERIFY OTP
+  =============================== */
+  const handleVerifyOtp = async () => {
     try {
-      setChecking(true);
       setError("");
+      const res = await verifyOtp({
+        email,
+        otp,
+        role: "MENTOR",
+      }).unwrap();
 
-      const res = await fetch(
-        `/api/auth/check-email-verified?email=${email}`
-      );
-      const data = await res.json();
+      setEmailVerified(true);
+      setShowOtpModal(false);
+      onVerified?.(res);
+    } catch (err) {
+      setError(err?.data?.message || "Invalid OTP. Please try again.");
+    }
+  };
 
-      if (data.verified) {
-        setEmailVerified(true);
-        onVerified(email);
-      } else {
-        setError("Email not verified yet. Please check your inbox.");
-      }
-    } catch {
-      setError("Unable to check verification status");
-    } finally {
-      setChecking(false);
+  /* ===============================
+     RESEND OTP
+  =============================== */
+  const handleResendOtp = async () => {
+    if (timer > 0) return;
+
+    try {
+      setError("");
+      await sendEmail({
+        email,
+        role: "MENTOR",
+      }).unwrap();
+      setTimer(60);
+    } catch (err) {
+      console.error("Resend failed", err);
+      setError(err?.data?.message || "Failed to resend OTP");
     }
   };
 
   return (
-    <Section title="What is your email address">
+    <Section title='What is your email address'>
       <ErrorMessage error={error} />
 
-      <div className="flex items-center gap-3 w-full">
+      <div className='flex items-center gap-3 w-full'>
         {/* INPUT */}
-        <div className="relative flex-1">
+        <div className='relative flex-1'>
           <Input
-            type="email"
-            placeholder="Enter email address here"
+            type='email'
+            placeholder='Enter email address here'
             value={email}
             disabled={emailVerified}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setEmailVerified(false);
-              setEmailSent(false);
-            }}
-            className="pr-20"
+            onChange={handleEmailChange}
+            className='pr-20'
             required
           />
 
           {email && !emailVerified && (
             <button
-              type="button"
-              onClick={() => setEmail("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2
-              border border-gray-400 rounded-full p-1 mt-1"
+              type='button'
+              onClick={() => {
+                setEmail("");
+                onEmailChange?.("");
+              }}
+              className='absolute right-3 top-1/2 -translate-y-1/2
+              border border-gray-400 rounded-full p-1 mt-1'
             >
               <X size={14} />
             </button>
@@ -110,38 +185,26 @@ export default function EmailVerificationSection({ onVerified }) {
           {emailVerified && (
             <CheckCircle
               size={18}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600"
+              className='absolute right-3 top-1/2 -translate-y-1/2 text-green-600 mt-1'
             />
           )}
         </div>
 
-        {/* SEND EMAIL */}
-        {!emailVerified && email && !emailSent && (
+        {/* SEND OTP BUTTON */}
+        {!emailVerified && email && (
           <button
-            type="button"
-            onClick={handleSendEmail}
+            type='button'
+            onClick={handleSendOtp}
             disabled={sending}
-            className="text-blue-600 font-semibold text-sm flex items-center gap-1 mt-2"
+            className='text-blue-600 font-semibold text-sm flex items-center gap-1 mt-2'
           >
-            {sending ? "Sending..." : "Send email"}
+            {sending ? "Sending..." : "Send OTP"}
             {!sending && <ArrowRight size={14} />}
           </button>
         )}
 
-        {/* VERIFY EMAIL */}
-        {!emailVerified && emailSent && (
-          <button
-            type="button"
-            onClick={handleCheckVerification}
-            disabled={checking}
-            className="text-blue-600 font-semibold text-sm mt-2"
-          >
-            {checking ? "Checking..." : "Verify email"}
-          </button>
-        )}
-
         {emailVerified && (
-          <span className="text-green-600 font-semibold text-sm">
+          <span className='text-green-600 font-semibold text-sm mt-2'>
             Verified
           </span>
         )}
@@ -149,16 +212,52 @@ export default function EmailVerificationSection({ onVerified }) {
 
       {/* INLINE NOTICE */}
       <InlineNotice
-        icon={<MailWarning size={16} />}
+        icon={
+          emailVerified ? <MailCheck size={16} /> : <MailWarning size={16} />
+        }
         text={
           emailVerified
             ? "Email verified successfully"
-            : emailSent
-            ? "Verification email sent. Please check your inbox."
-            : "We will send you an email for verification"
+            : "We will send you an OTP for verification"
         }
-        variant={emailVerified ? "primary" : "secondary"}
+        variant={emailVerified ? "primaryFill" : "secondary"}
       />
+
+      {/* OTP MODAL */}
+      <PopupModal
+        open={showOtpModal}
+        title='Enter Verification Code'
+        description={`We have sent a verification code to ${email}`}
+        onClose={() => setShowOtpModal(false)}
+        primaryButtonText={verifying ? "Verifying..." : "Verify Email"}
+        onPrimaryClick={handleVerifyOtp}
+      >
+        <div className='flex flex-col gap-4'>
+          <Input
+            type='text'
+            placeholder='Enter OTP'
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className='text-center text-lg tracking-widest'
+            maxLength={6}
+          />
+
+          <div className='flex justify-between items-center text-sm'>
+            {timer > 0 ? (
+              <span className='text-gray-500'>Resend in {timer}s</span>
+            ) : (
+              <button
+                type='button'
+                onClick={handleResendOtp}
+                className='text-blue-600 font-medium hover:underline'
+                disabled={sending}
+              >
+                Resend Code
+              </button>
+            )}
+          </div>
+        </div>
+      </PopupModal>
     </Section>
   );
 }
