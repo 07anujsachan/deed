@@ -22,11 +22,13 @@ export default function Step1() {
 
   // Initialize form with stored data or defaults
   const [form, setForm] = useState({
-    name: storedFormData?.name || "",
+    fullName: storedFormData?.fullName || "",
     email: storedFormData?.email || "",
     phone: storedFormData?.phone || "",
     stateId: storedFormData?.stateId || null,
     cityId: storedFormData?.cityId || null,
+    state: storedFormData?.state || "",
+    city: storedFormData?.city || "",
   });
 
   // Sync Redux -> Local State (e.g. on hydrate)
@@ -34,11 +36,13 @@ export default function Step1() {
     if (storedFormData) {
       setForm((prev) => ({
         ...prev,
-        name: storedFormData.name || prev.name,
+        fullName: storedFormData.fullName || prev.fullName,
         email: storedFormData.email || prev.email,
         phone: storedFormData.phone || prev.phone,
         stateId: storedFormData.stateId || prev.stateId,
         cityId: storedFormData.cityId || prev.cityId,
+        state: storedFormData.state || prev.state,
+        city: storedFormData.city || prev.city,
       }));
     }
   }, [storedFormData]);
@@ -55,7 +59,10 @@ export default function Step1() {
   const handleNext = async () => {
     if (!emailVerified) return;
     try {
-      await saveStep1(form).unwrap();
+      const payload = { ...form };
+      delete payload.stateId;
+      delete payload.cityId;
+      await saveStep1(payload).unwrap();
       router.push("/mentor/mentorform/step-2");
     } catch (error) {
       console.error("Step 1 save failed", error);
@@ -93,9 +100,9 @@ export default function Step1() {
       <Section title='Let us know your full name'>
         <Input
           placeholder='Full Name'
-          value={form.name}
+          value={form.fullName}
           disabled={!emailVerified}
-          onChange={(e) => handleUpdate("name", e.target.value)}
+          onChange={(e) => handleUpdate("fullName", e.target.value)}
         />
       </Section>
 
@@ -117,14 +124,24 @@ export default function Step1() {
               countryid={INDIA_COUNTRY_ID}
               value={form.stateId}
               disabled={!emailVerified}
-              onChange={(state) => {
-                const newStateId = state?.id || null;
+              onChange={(e) => {
+                const newStateId = e?.id || null;
+                const newStateName = e?.name || "";
                 setForm((prev) => ({
                   ...prev,
                   stateId: newStateId,
+                  state: newStateName,
                   cityId: null,
+                  city: "",
                 }));
-                dispatch(updateFormData({ stateId: newStateId, cityId: null }));
+                dispatch(
+                  updateFormData({
+                    stateId: newStateId,
+                    state: newStateName,
+                    cityId: null,
+                    city: "",
+                  })
+                );
               }}
               placeHolder='Select State'
               className='custom-select'
@@ -136,7 +153,18 @@ export default function Step1() {
               stateid={form.stateId}
               value={form.cityId}
               disabled={!emailVerified || !form.stateId}
-              onChange={(city) => handleUpdate("cityId", city?.id || null)}
+              onChange={(e) => {
+                const newCityId = e?.id || null;
+                const newCityName = e?.name || "";
+                setForm((prev) => ({
+                  ...prev,
+                  cityId: newCityId,
+                  city: newCityName,
+                }));
+                dispatch(
+                  updateFormData({ cityId: newCityId, city: newCityName })
+                );
+              }}
               placeHolder='Select City'
               className='custom-select'
             />
