@@ -1,7 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
   --primary-btn-bg: #0050ae;
   --secondary-btn-bg: #1b752a;
@@ -93,4 +93,73 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
+}
+
+/* Shared select style (used everywhere) */
+.custom-select {
+  appearance: none;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #d1e5d6;
+  background-color: #ffffff;
+  font-size: 16px;
+  color: #374151;
+  outline: none;
+}
+.stsearch-box input{
+  border: none !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.75rem !important;
+  width: 100% !important;
+}
+.stdropdown-input{
+  padding: 0 !important;
+  display: flex ;
+  align-items: center;
+}
+.stdropdown-tools{
+  padding-right: 0.75rem;
+}
+
+.stdropdown-container{
+  border:1px solid#D5E1D7 !important;
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+      border-radius: 0.75rem !important;
+}
+
+.stsearch-box {
+  padding: 0 !important;
+}
+
+/* Focus */
+.custom-select:focus {
+  border-color: #1b752a !important;
+  box-shadow: none;
+}
+
+/* Disabled */
+.custom-select:disabled {
+  background-color: #f3f4f6 !important;
+  cursor: not-allowed;
+}
+
+/* Custom arrow */
+.custom-select-wrapper {
+  position: relative;
+}
+
+.custom-select-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #6b7280 !important;
+  border-bottom: 2px solid #6b7280 !important;
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
 }

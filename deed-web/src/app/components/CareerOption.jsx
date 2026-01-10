@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { Button } from "../components/UIComponents/PrimarySmallButton";
+import { Button } from "../../components/ui/PrimarySmallButton";
 import { careerOptions } from "@/data/fieldsData";
 export default function CareerOption() {
   const cardScrollRef = useRef(null);

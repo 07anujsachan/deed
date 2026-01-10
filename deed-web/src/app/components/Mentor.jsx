@@ -1,129 +1,130 @@
 "use client";
 import { useState, useRef } from "react";
-import { Button } from "../components/UIComponents/PrimarySmallButton";
-import MentorCard from "../components/UIComponents/Mentorcard";
+import { Button } from "../../components/ui/PrimarySmallButton";
+import MentorCard from "./UIComponents/Mentorcard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useGetMentorsQuery } from "@/features/mentor/mentorApiSlice";
+import { useGetMentorsQuery } from "@/redux/mentor/mentorApi";
 import { useRouter } from "next/navigation";
+import Loader from "../../components/ui/Loader";
 
 // Dummy mentors data (all same image + master added in education)
-// const mentors = [
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Anurag Sachan",
-//     title: "UI/UX Designer",
-//     categories: ["design"],
-//     tags: ["Design", "UX", "Figma"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "Bachelor of Fine Art (BFA)",
-//         institute: "College of Art, Delhi University, New Delhi",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Rohit Kumar",
-//     title: "Frontend Developer & UI/UX",
-//     categories: ["development", "design"],
-//     tags: ["React", "JavaScript", "Tailwind"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "B.Tech in Computer Science",
-//         institute: "IIT Kanpur",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Sneha Verma",
-//     title: "Educator",
-//     categories: ["teaching"],
-//     tags: ["Education", "Training"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "M.Ed",
-//         institute: "Delhi University",
-//       },
-//       {
-//         degree: "B.Ed",
-//         institute: "Jamia Millia Islamia, New Delhi",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Rahul Sharma",
-//     title: "Software Engineer",
-//     categories: ["development"],
-//     tags: ["Node.js", "Next.js", "API"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "B.Tech in Information Technology",
-//         institute: "NIT Trichy",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Priya Mehta",
-//     title: "Doctor & Medical Researcher",
-//     categories: ["medical"],
-//     tags: ["MBBS", "Research"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "MBBS",
-//         institute: "AIIMS, Delhi",
-//       },
-//       {
-//         degree: "MD in Medicine",
-//         institute:
-//           "Postgraduate Institute of Medical Education and Research, Chandigarh",
-//       },
-//     ],
-//   },
-//   {
-//     imageUrl: "/media/anuj.jpg",
-//     name: "Amit Singh",
-//     title: "Artist & Entrepreneur",
-//     categories: ["art", "business"],
-//     tags: ["Fine Arts", "Startup"],
-//     education: [
-//       {
-//         degree: "Masters in Design (M.Des.)",
-//         institute: "National Institute of Design, Bangalore",
-//       },
-//       {
-//         degree: "Bachelor of Fine Arts",
-//         institute: "MS University, Baroda",
-//       },
-//       {
-//         degree: "MBA",
-//         institute: "IIM Ahmedabad",
-//       },
-//     ],
-//   },
-// ];
+const mentors = [
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Anurag Sachan",
+    title: "UI/UX Designer",
+    categories: ["design"],
+    tags: ["Design", "UX", "Figma"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "Bachelor of Fine Art (BFA)",
+        institute: "College of Art, Delhi University, New Delhi",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Rohit Kumar",
+    title: "Frontend Developer & UI/UX",
+    categories: ["development", "design"],
+    tags: ["React", "JavaScript", "Tailwind"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "B.Tech in Computer Science",
+        institute: "IIT Kanpur",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Sneha Verma",
+    title: "Educator",
+    categories: ["teaching"],
+    tags: ["Education", "Training"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "M.Ed",
+        institute: "Delhi University",
+      },
+      {
+        degree: "B.Ed",
+        institute: "Jamia Millia Islamia, New Delhi",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Rahul Sharma",
+    title: "Software Engineer",
+    categories: ["development"],
+    tags: ["Node.js", "Next.js", "API"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "B.Tech in Information Technology",
+        institute: "NIT Trichy",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Priya Mehta",
+    title: "Doctor & Medical Researcher",
+    categories: ["medical"],
+    tags: ["MBBS", "Research"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "MBBS",
+        institute: "AIIMS, Delhi",
+      },
+      {
+        degree: "MD in Medicine",
+        institute:
+          "Postgraduate Institute of Medical Education and Research, Chandigarh",
+      },
+    ],
+  },
+  {
+    imageUrl: "/media/anuj.jpg",
+    name: "Amit Singh",
+    title: "Artist & Entrepreneur",
+    categories: ["art", "business"],
+    tags: ["Fine Arts", "Startup"],
+    education: [
+      {
+        degree: "Masters in Design (M.Des.)",
+        institute: "National Institute of Design, Bangalore",
+      },
+      {
+        degree: "Bachelor of Fine Arts",
+        institute: "MS University, Baroda",
+      },
+      {
+        degree: "MBA",
+        institute: "IIM Ahmedabad",
+      },
+    ],
+  },
+];
 
 const allFilters = [
   "Top rated",
@@ -141,7 +142,8 @@ export default function MentorSection({ page }) {
   const [activeFilters, setActiveFilters] = useState([]);
   const filterScrollRef = useRef(null);
   const cardScrollRef = useRef(null);
-  const { data, isLoading, error } = useGetMentorsQuery({});
+  const router = useRouter();
+  const { data, isLoading } = useGetMentorsQuery({});
   const mentors = data?.data || [];
   const toggleFilter = (filter) => {
     setActiveFilters((prev) =>
@@ -150,12 +152,11 @@ export default function MentorSection({ page }) {
         : [...prev, filter]
     );
   };
-
   const filteredMentors =
     activeFilters.length === 0
       ? mentors
       : mentors.filter((m) =>
-          m.expertise.some((cat) =>
+          m.mentorship?.topics?.some((cat) =>
             activeFilters
               .map((f) => f.toLowerCase())
               .includes(cat.toLowerCase())
@@ -170,8 +171,16 @@ export default function MentorSection({ page }) {
       });
     }
   };
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error?.data?.message}</div>;
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>{error?.data?.message}</div>;
+
+  if (isLoading) {
+    return (
+      <div className='w-[90%] mx-auto mt-12'>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className='w-[90%] mx-auto relative mt-12'>
@@ -194,35 +203,34 @@ export default function MentorSection({ page }) {
       {/* Filters */}
       {page === "mentors" && (
         <>
-        
-      <p className='mb-2'>Quick filters:</p>
-        <div
-          ref={filterScrollRef}
-          className='flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x items-center'
-        >
-          {/* All filter - Always active */}
-          <button
-            disabled
-            className='px-4 py-2 rounded-xl border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start'
+          <p className='mb-2'>Quick filters:</p>
+          <div
+            ref={filterScrollRef}
+            className='flex gap-2 mb-6 overflow-x-auto scrollbar-hide snap-x items-center'
           >
-            See all filters
-          </button>
-          <div className='w-[2px] h-9  bg-gray-900'></div>
-          {allFilters.map((filter, i) => (
+            {/* All filter - Always active */}
             <button
-              key={i}
-              onClick={() => toggleFilter(filter)}
-              className={`px-4 py-2 rounded-xl border shrink-0 snap-start flex items-center gap-2 ${
-                activeFilters.includes(filter)
-                  ? "text-green-700 border-green-500 font-semibold"
-                  : "text-gray-800 border-gray-300"
-              }`}
+              disabled
+              className='px-4 py-2 rounded-xl border bg-green-100 text-green-700 border-green-500 font-semibold shrink-0 snap-start'
             >
-              {filter}
-              {activeFilters.includes(filter) && <span>✕</span>}
+              See all filters
             </button>
-          ))}
-        </div>
+            <div className='w-[2px] h-9  bg-gray-900'></div>
+            {allFilters.map((filter, i) => (
+              <button
+                key={i}
+                onClick={() => toggleFilter(filter)}
+                className={`px-4 py-2 rounded-xl border shrink-0 snap-start flex items-center gap-2 ${
+                  activeFilters.includes(filter)
+                    ? "text-green-700 border-green-500 font-semibold"
+                    : "text-gray-800 border-gray-300"
+                }`}
+              >
+                {filter}
+                {activeFilters.includes(filter) && <span>✕</span>}
+              </button>
+            ))}
+          </div>
         </>
       )}
 
@@ -233,15 +241,50 @@ export default function MentorSection({ page }) {
           className='flex gap-4 scroll-pl-4 snap-x snap-mandatory overflow-x-auto scrollbar-hide'
           style={{ scrollBehavior: "smooth" }}
         >
-          {filteredMentors.map((mentor, index) => (
-            <div
-              key={index}
-              className='snap-start shrink-0'
-              style={{ width: "300px" }} // fixed card width
-            >
-              <MentorCard {...mentor} education={mentor.education.slice(-2)} />
-            </div>
-          ))}
+          {filteredMentors.map((mentor, index) => {
+            // Map backend data to frontend format
+            const educationData =
+              mentor.background?.type === "student"
+                ? mentor.background.student?.map((edu) => ({
+                    subject: edu.fieldOfStudy || edu.educationLevel,
+                    institution: edu.institution,
+                  })) || []
+                : mentor.background?.professional
+                ? [
+                    {
+                      subject:
+                        mentor.background.professional.occupation ||
+                        "Professional",
+                      institution:
+                        mentor.background.professional.company ||
+                        mentor.background.professional.experience,
+                    },
+                  ]
+                : [];
+
+            const mappedMentor = {
+              _id: mentor._id,
+              photo: mentor.avatar?.url || "/media/anuj.jpg", // Fallback image
+              fullName: mentor.basicInfo?.fullName || "Mentor",
+              profession:
+                mentor.background?.type === "professional"
+                  ? mentor.background.professional?.occupation
+                  : mentor.background?.student?.[0]?.educationLevel ||
+                    "Student",
+              expertise: mentor.mentorship?.topics || [],
+              education: educationData.slice(0, 2), // Show top 2 education items
+            };
+
+            return (
+              <div
+                key={mentor._id || index}
+                className='snap-start shrink-0'
+                style={{ width: "300px" }} // fixed card width
+              >
+                <MentorCard {...mappedMentor} />
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -250,7 +293,7 @@ export default function MentorSection({ page }) {
         <div className='mt-8 flex justify-between items-center'>
           <button
             onClick={() => scroll("left")}
-            className='  p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold'
+            className='p-2 rounded-xl border-2 border-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] text-semibold'
           >
             <ChevronLeft size={24} />
           </button>
@@ -258,7 +301,7 @@ export default function MentorSection({ page }) {
           <Button
             text='See All Mentors'
             variant='PrimarySmallOutlinedButton'
-            onClick={() => useRouter().push("/mentors")}
+            onClick={() => router.push("/mentors")}
             className='md:ml-6 md:text-xl text-sm '
           />
 
