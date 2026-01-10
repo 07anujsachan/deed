@@ -70,7 +70,7 @@ export const mentorApi = createApi({
     ========================= */
     getMentors: builder.query({
       query: () => ({
-        url: "/mentors",
+        url: "/mentors/approved",
         method: "GET",
       }),
     }),
