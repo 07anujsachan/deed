@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/components/ui/Loader";
+import MentorProfileSkeleton from "@/app/components/skeletons/MentorProfileSkeleton";
 import { useGetMentorProfileQuery } from "@/redux/mentor/mentorApi";
 import { CalendarClock, Headphones } from "lucide-react";
 import React, { useState } from "react";
@@ -16,8 +16,8 @@ export default function MentorDetailPage({ params }) {
 
   if (isLoading)
     return (
-      <div className='w-full h-screen flex items-center justify-center'>
-        <Loader />
+      <div className='w-full h-screen'>
+        <MentorProfileSkeleton />
       </div>
     );
 
@@ -28,7 +28,7 @@ export default function MentorDetailPage({ params }) {
       <div className='min-h-screen bg-[#E3F1E8] font-sans'>
         {/* Header Section */}
         <div className='bg-gradient-to-b from-white to-[#E3F1E8] relative'>
-          <div className='max-w-6xl mx-auto px-6 py-12 flex items-center gap-8'>
+          <div className='max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center gap-8'>
             {/* Profile Image */}
             <img
               src={mentor?.avatar?.url || "/media/anuj.jpg"}
@@ -37,7 +37,7 @@ export default function MentorDetailPage({ params }) {
             />
             {/* Name + Title */}
 
-            <div className='flex justify-between w-full items-center'>
+            <div className='flex flex-col md:flex-row justify-between w-full items-center gap-4'>
               <div className='flex-1 '>
                 <h1 className='text-2xl font-bold text-gray-900 capitalize'>
                   {mentor?.basicInfo?.fullName}
@@ -58,7 +58,7 @@ export default function MentorDetailPage({ params }) {
           </div>
 
           {/* Tabs */}
-          <div className='max-w-6xl mx-auto px-6 flex gap-8 border-b border-gray-300'>
+          <div className='max-w-6xl mx-auto px-6 flex gap-8 border-b border-gray-300 overflow-x-auto'>
             {["Overview", "Reviews", "Achievements", "Group Sessions"].map(
               (tab) => (
                 <button
@@ -78,9 +78,9 @@ export default function MentorDetailPage({ params }) {
         </div>
 
         {/* Content Section */}
-        <div className='max-w-7xl mx-auto px-6 py-10 grid grid-cols-3 gap-8'>
+        <div className='max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8'>
           {/* Left Column */}
-          <div className='col-span-2 space-y-6'>
+          <div className='md:col-span-2 space-y-6'>
             {activeTab === "Overview" && (
               <>
                 {/* About */}

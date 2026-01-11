@@ -64,7 +64,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className='absolute top-20 left-0 w-full bg-white shadow-lg md:hidden flex flex-col items-left gap-4 py-4 px-6 z-40 '>
+        <div className='absolute top-16 left-0 w-full bg-white shadow-lg md:hidden flex flex-col items-left gap-4 py-4 px-6 z-40 '>
           <a
             href='#'
             className='text-[#111827] font-medium'

@@ -28,7 +28,7 @@ export default function MainLayout({ children }) {
       </div>
 
       {/* Footer */}
-      <div className='hidden md:block'>
+      <div className='block mb-16 md:mb-0'>
         <Footer />
       </div>
     </div>

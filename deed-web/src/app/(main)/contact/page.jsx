@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/PrimarySmallButton";
 import {
   Check,
   Instagram,
@@ -9,7 +10,6 @@ import {
   PhoneCall,
   Twitter,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const contactData = [
   { label: "+91-34567890", Icon: PhoneCall },
@@ -140,7 +140,7 @@ export default function ContactPage() {
               variant={"PrimarySmallButton"}
               text={"Submit"}
               type='submit'
-              className='w-full md:w-auto float-right box-border z-50'
+              className='w-full md:w-auto float-right box-border'
             />
             <img
               src='/media/paperPlane.png'

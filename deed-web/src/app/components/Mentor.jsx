@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetMentorsQuery } from "@/redux/mentor/mentorApi";
 import { useRouter } from "next/navigation";
 import Loader from "../../components/ui/Loader";
+import MentorListSkeleton from "./skeletons/MentorListSkeleton";
 
 // Dummy mentors data (all same image + master added in education)
 const mentors = [
@@ -174,10 +175,13 @@ export default function MentorSection({ page }) {
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>{error?.data?.message}</div>;
 
+  // ... imports
+
+  // ... inside component
   if (isLoading) {
     return (
       <div className='w-[90%] mx-auto mt-12'>
-        <Loader />
+        <MentorListSkeleton />
       </div>
     );
   }

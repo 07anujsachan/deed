@@ -72,7 +72,7 @@ export default function Home({ setTheme }) {
             </div>
 
             {/* Search Button */}
-            <button className=' rounded-xl ring-inset ring-2 ring-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] px-5 py-2  transition flex items-center gap-2'>
+            <button className='rounded-xl ring-inset ring-2 ring-[#1B752A] bg-[#EFFEF1] shadow-md text-[#1B752A] md:px-5 py-2 px-2 transition flex items-center md:gap-2 gap-0'>
               Search{" "}
               <span className='text-lg'>
                 <ArrowRight size={18} />

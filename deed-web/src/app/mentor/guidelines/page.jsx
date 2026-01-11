@@ -3,58 +3,47 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { MentorCard } from "../components/OurMissionCard";
 import { Button } from "@/components/ui/PrimarySmallButton";
-import { Check } from "lucide-react";
+import { Check, Handshake } from "lucide-react";
 import { useRouter } from "next/navigation";
 import AcceptBar from "../components/AcceptBar";
+import CommunityGuidelineCard from "@/app/components/UIComponents/CommunityGuidelineCard";
 
-export const communityGuidelines = [
+const communityGuidelines = [
   {
-    title: "1. Be Respectful & Kind",
+    icon: "/guideline/1.png",
+    title: "Be Respectful & Kind",
     description:
       "Every student comes from a different background and level of understanding. Listen without judgment, and encourage without pressure.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#EAF6FF]",
   },
   {
-    title: "2. Share Honestly, Not Perfectly",
+    icon: "/guideline/2.png",
+    title: "Share Honestly, Not Perfectly",
     description:
-      "You don’t need to have all the answers, just your real experiences. Authentic stories help students relate and learn far more than textbook advice.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#EEFAF1]",
+      "You do not need to have all the answers, just your real experiences. Authentic stories help students relate and learn far more than textbook advice.",
   },
   {
-    title: "3. Keep It Student-Centered",
+    icon: "/guideline/3.png",
+    title: "Keep It Student-Centered",
     description:
       "This is about helping students make choices that work best for them. Guide, don’t impose. Encourage exploration.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#FFF1EC]",
   },
   {
-    title: "4. Value Their Time & Yours",
+    icon: "/guideline/4.png",
+    title: "Value Their Time & Yours",
     description:
       "If you commit to a session, try your best to show up. Consistency builds trust.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#EEFAF1]",
   },
   {
-    title: "5. Maintain Privacy & Boundaries",
+    icon: "/guideline/5.png",
+    title: "Maintain Privacy & Boundaries",
     description:
-      "All conversations with students should remain respectful, safe, and professional. Avoid asking for personal contact or details beyond what’s needed for mentoring.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#FFF6E8]",
+      "All conversations with students should remain respectful, safe, and professional. Avoid asking for personal contact details beyond what’s needed.",
   },
   {
-    title: "6. Keep Growing as a Mentor",
+    icon: "/guideline/6.png",
+    title: "Keep Growing as a Mentor",
     description:
-      "We’ll share learning resources and community updates to help you evolve as a guide. Stay curious, your growth helps others grow too.",
-    image: "/media/Anuj.jpg",
-    badges: ["Badge"],
-    backgroundColor: "bg-[#EAF6FF]",
+      "We’ll share learning resources and community updates to help you evolve as a guide. Stay curious—your growth helps others grow too.",
   },
 ];
 
@@ -120,33 +109,43 @@ const Page = () => {
         </div>
       </section>
 
-      {/* GUIDELINES */}
-      <section className='bg-white mx-3 md:mx-8 mt-12 md:mt-24 rounded-[40px] px-6 md:px-8 py-10 md:py-16 shadow-md'>
-        <div className='max-w-3xl mb-10'>
-          <h2 className='text-3xl md:text-4xl font-semibold'>
-            🤝 Community Guidelines
-          </h2>
-          <p className='mt-3 text-gray-700 text-lg'>
-            At Deed, we’re building a community based on respect, empathy, and
-            authenticity.
-          </p>
+      <div className='text-center w-[50%] space-y-8 mt-20 mx-auto'>
+        <p className="text-xl">
+          We will be taking you to a form to fill up. This form will have 5
+          short steps that help us understand you better, your background,
+          interests, and the kind of guidance you’d like to offer.
+        </p>
+        <div className='bg-blue-600 text-white p-2 rounded-xl flex items-center gap-2 w-[80%] mx-auto'>
+          <Handshake className="w-6 h-6 ml-4"/>
+          <p className='text-center'>Before you start we would like you to understand the following</p>
         </div>
+      </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center items-center'>
-          {communityGuidelines.map((item, index) => (
-            <MentorCard
-              key={index}
-              name={item.title}
-              description={item.description}
-              image={item.image}
-              badges={item.badges}
-              backgroundColor={item.backgroundColor}
-              size='lg'
-              imageSize='lg'
-            />
-          ))}
-        </div>
-      </section>
+      {/* GUIDELINES */}
+ <section className="bg-white mx-3 md:mx-8 mt-12 md:mt-24 rounded-[40px] px-6 md:px-10 py-10 md:py-16 shadow-md">
+      {/* Header */}
+      <div className="max-w-4xl mb-10">
+        <h2 className="text-3xl md:text-4xl font-semibold">
+          🤝 Community Guidelines
+        </h2>
+        <p className="mt-3 text-gray-600 text-lg">
+          At Deed, we’re building a community based on respect, empathy, and authenticity.
+          Before you begin, please take a moment to go through our simple principles:
+        </p>
+      </div>
+
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {communityGuidelines.map((item, index) => (
+          <CommunityGuidelineCard
+            key={index}
+            icon={item.icon}
+            title={item.title}
+            description={item.description}
+          />
+        ))}
+      </div>
+    </section>
 
       {/* Accept bar section */}
       <div ref={anchorRef} className='w-full flex justify-center my-16'>
