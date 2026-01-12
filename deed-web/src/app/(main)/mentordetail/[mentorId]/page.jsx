@@ -8,11 +8,7 @@ export default function MentorDetailPage({ params }) {
   const { data, isLoading, isError } = useGetMentorProfileQuery(mentorId);
   const [activeTab, setActiveTab] = useState("Overview"); // default tab
 
-  const mentor = data?.data; // Backend returns { mentor: ... } or similar, checking response structure locally first is redundant as per plan, assuming standard wrapper
-
-  // NOTE: Based on route.js provided earlier, GET /mentors returns { mentors }, need to verify GET /mentors/:id structure.
-  // Assuming GET /mentors/:id returns { mentor } or just the object.
-  // Let's assume standard { mentor } wrapper based on previous interactions.
+  const mentor = data?.data;
 
   if (isLoading)
     return (
@@ -87,20 +83,6 @@ export default function MentorDetailPage({ params }) {
                 <div>
                   <p className='text-gray-800 leading-relaxed text-sm'>
                     {mentor?.about}
-                    {/* Hi, I am Kingsley. I am passionate about helping companies
-                    enhance their design experiences, refine their ideas and
-                    launch impactful solutions. In the past, I have helped
-                    companies with millions of customers grow their businesses,
-                    and improve and create products by identifying product and
-                    user experience problems and opportunities, conceptualizing,
-                    prototyping, and working with developers (handoff). */}
-                  </p>
-                  <p className='text-gray-800 leading-relaxed text-sm mt-3'>
-                    I like to be involved in different stages of a digital
-                    project, from the seed of the idea, through to sketches,
-                    design and even the front-end and back-end build, this means
-                    I can jump in at any stage of a project, or take on the
-                    whole project, from design to build.
                   </p>
                 </div>
 
