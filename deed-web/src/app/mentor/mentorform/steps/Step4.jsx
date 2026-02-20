@@ -20,8 +20,8 @@ export default function Step4() {
   const storedFormData = useSelector((state) => state.mentor.formData);
 
   const [form, setForm] = useState({
-    mentoringExperience: storedFormData?.mentoringExperience || "",
-    studentStruggles: storedFormData?.studentStruggles || "",
+    guidedBefore: storedFormData?.guidedBefore || "",
+    reason: storedFormData?.reason || "",
   });
 
   // Sync to Redux
@@ -70,8 +70,8 @@ export default function Step4() {
             <CheckboxOption
               key={item}
               label={item}
-              checked={form.mentoringExperience === item}
-              onChange={() => setForm({ ...form, mentoringExperience: item })}
+              checked={form.guidedBefore === item}
+              onChange={() => setForm({ ...form, guidedBefore: item })}
               isRadio={true}
             />
           ))}
@@ -84,10 +84,8 @@ export default function Step4() {
       >
         <Input
           placeholder='You can also let us know if you had faced any struggles'
-          value={form.studentStruggles}
-          onChange={(e) =>
-            setForm({ ...form, studentStruggles: e.target.value })
-          }
+          value={form.reason}
+          onChange={(e) => setForm({ ...form, reason: e.target.value })}
         />
       </Section>
     </FormStepCard>

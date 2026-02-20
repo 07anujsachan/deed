@@ -28,12 +28,12 @@ export default function Step2() {
     company: storedFormData?.company || "",
     experience: storedFormData?.experience || "",
     industry: storedFormData?.industry || [],
-    socials: storedFormData?.socials || [],
+    socialLinks: storedFormData?.socialLinks || [],
     education: storedFormData?.education || [
       {
-        level: "",
-        field: "",
-        college: "",
+        educationLevel: "",
+        fieldOfStudy: "",
+        institution: "",
         from: "",
         to: "",
       },

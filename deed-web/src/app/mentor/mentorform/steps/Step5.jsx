@@ -27,9 +27,9 @@ export default function Step5() {
 
   const [form, setForm] = useState({
     about: storedFormData?.about || "",
-    agreements: storedFormData?.agreements || {
-      respectful: false,
-      consent: false,
+    consent: storedFormData?.consent || {
+      codeOfConductAccepted: false,
+      termsAccepted: false,
     },
   });
 
@@ -62,12 +62,13 @@ export default function Step5() {
   const [saveStep5, { error: saveError, isLoading }] = useSaveStep5Mutation();
 
   const handleSubmit = async () => {
-    if (!form.agreements.respectful || !form.agreements.consent) return;
+    if (!form.consent.codeOfConductAccepted || !form.consent.termsAccepted)
+      return;
 
     const payload = new FormData();
     if (photo) payload.append("photo", photo);
     payload.append("about", form.about);
-    payload.append("agreements", JSON.stringify(form.agreements));
+    payload.append("consent", JSON.stringify(form.consent));
 
     try {
       await saveStep5(payload).unwrap();
@@ -84,7 +85,7 @@ export default function Step5() {
       title='Verification & Consent'
       onPrev={() => router.push("/mentor/mentorform/step-4")}
       onNext={handleSubmit}
-      nextLabel='Submit'
+      nextText='Submit'
       isLoading={isLoading}
     >
       {/* ERROR MESSAGE */}
@@ -186,11 +187,11 @@ export default function Step5() {
       <Section title={`Agreements`}>
         <label className='flex items-center gap-3 cursor-pointer mb-12'>
           <Checkbox
-            checked={form.agreements.respectful}
+            checked={form.consent.codeOfConductAccepted}
             onCheckedChange={(v) =>
               setForm({
                 ...form,
-                agreements: { ...form.agreements, respectful: v },
+                consent: { ...form.consent, codeOfConductAccepted: v },
               })
             }
           />
@@ -202,11 +203,11 @@ export default function Step5() {
 
         <label className='flex items-center gap-3 cursor-pointer'>
           <Checkbox
-            checked={form.agreements.consent}
+            checked={form.consent.termsAccepted}
             onCheckedChange={(v) =>
               setForm({
                 ...form,
-                agreements: { ...form.agreements, consent: v },
+                consent: { ...form.consent, termsAccepted: v },
               })
             }
           />

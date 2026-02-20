@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   ArrowRight,
   Bell,
@@ -33,9 +33,11 @@ export default function EmailVerificationSection({
 
   // OTP Modal State
   const [showOtpModal, setShowOtpModal] = useState(false);
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpStatus, setOtpStatus] = useState("neutral"); // 'neutral', 'success', 'error'
   const [timer, setTimer] = useState(0);
   const [timerInterval, setTimerInterval] = useState(null);
+  const inputRefs = useRef([]);
 
   const [sendEmail, { isLoading: sending }] =
     useSendVerificationEmailMutation();
@@ -104,6 +106,8 @@ export default function EmailVerificationSection({
 
       setShowOtpModal(true);
       setTimer(60);
+      setOtp(["", "", "", "", "", ""]);
+      setOtpStatus("neutral");
     } catch (err) {
       setError(err?.data?.message || "Failed to send OTP");
     }
@@ -115,17 +119,60 @@ export default function EmailVerificationSection({
   const handleVerifyOtp = async () => {
     try {
       setError("");
+      const otpString = otp.join("");
       const res = await verifyOtp({
         email,
-        otp,
+        otp: otpString,
         role: "MENTOR",
       }).unwrap();
 
-      setEmailVerified(true);
-      setShowOtpModal(false);
-      onVerified?.(res);
+      setOtpStatus("success");
+      // Short delay to show success state before closing or proceeding
+      setTimeout(() => {
+        setEmailVerified(true);
+        setShowOtpModal(false);
+        onVerified?.(res);
+      }, 1000);
     } catch (err) {
+      setOtpStatus("error");
       setError(err?.data?.message || "Invalid OTP. Please try again.");
+    }
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (isNaN(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    if (otpStatus !== "neutral") setOtpStatus("neutral");
+
+    // Focus next input
+    if (value !== "" && index < 5) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (index, e) => {
+    // Backspace
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").slice(0, 6).split("");
+    if (pastedData.length > 0) {
+      const newOtp = [...otp];
+      pastedData.forEach((val, i) => {
+        if (i < 6 && !isNaN(val)) newOtp[i] = val;
+      });
+      setOtp(newOtp);
+
+      // Focus the last filled input or the first empty one
+      const focusIndex = Math.min(pastedData.length, 5);
+      inputRefs.current[focusIndex].focus();
     }
   };
 
@@ -142,6 +189,8 @@ export default function EmailVerificationSection({
         role: "MENTOR",
       }).unwrap();
       setTimer(60);
+      setOtpStatus("neutral");
+      setOtp(["", "", "", "", "", ""]);
     } catch (err) {
       console.error("Resend failed", err);
       setError(err?.data?.message || "Failed to resend OTP");
@@ -220,38 +269,75 @@ export default function EmailVerificationSection({
         variant={emailVerified ? "primaryFill" : "secondary"}
       />
 
-      {/* OTP MODAL */}
       <PopupModal
         open={showOtpModal}
-        title='Enter Verification Code'
-        description={`We have sent a verification code to ${email}`}
+        title='Enter OTP'
+        description={`We have sent you an OTP on your email. Please enter it below:`}
         onClose={() => setShowOtpModal(false)}
-        primaryButtonText={verifying ? "Verifying..." : "Verify Email"}
+        primaryButtonText={otpStatus === "success" ? "Continue" : verifying ? "Verifying..." : "Verify"}
         onPrimaryClick={handleVerifyOtp}
+        primaryButtonArrow={otpStatus === "success" ? "right" : "none"}
       >
-        <div className='flex flex-col gap-4'>
-          <Input
-            type='text'
-            placeholder='Enter OTP'
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className='text-center text-lg tracking-widest'
-            maxLength={6}
-          />
+        <div className='flex flex-col gap-6 mt-2'>
+          <div className='flex gap-2 sm:gap-4 justify-center'>
+            {otp.map((digit, index) => (
+              <Input
+                key={index}
+                ref={(el) => (inputRefs.current[index] = el)}
+                type='text'
+                inputMode='numeric'
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleOtpChange(index, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
+                className={`w-12 h-12 text-center text-xl font-semibold rounded-xl border transition-colors
+                  ${
+                    otpStatus === "error"
+                      ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500"
+                      : otpStatus === "success"
+                      ? "border-green-500 text-green-600 focus:border-green-500 focus:ring-green-500"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  }
+                `}
+              />
+            ))}
+          </div>
 
-          <div className='flex justify-between items-center text-sm'>
-            {timer > 0 ? (
-              <span className='text-gray-500'>Resend in {timer}s</span>
-            ) : (
-              <button
-                type='button'
-                onClick={handleResendOtp}
-                className='text-blue-600 font-medium hover:underline'
-                disabled={sending}
-              >
-                Resend Code
-              </button>
-            )}
+          <div className='flex justify-between items-center text-sm font-medium h-8'>
+            {/* LEFT SIDE: STATUS / TIMER */}
+            <div>
+              {otpStatus === "error" ? (
+                <div className='bg-red-50 text-red-600 px-3 py-1 rounded-md text-xs font-semibold'>
+                  Please enter a correct OTP
+                </div>
+              ) : otpStatus === "success" ? (
+                <div className='bg-green-50 text-green-600 px-3 py-1 rounded-md text-xs font-semibold'>
+                  OTP verified
+                </div>
+              ) : timer > 0 ? (
+                <div className='bg-blue-50 text-blue-700 px-3 py-1 rounded-md text-xs font-medium'>
+                  Resend OTP in{" "}
+                  <span className='font-bold'>{timer} seconds</span>
+                </div>
+              ) : (
+                <span className='text-gray-400 text-xs'> </span>
+              )}
+            </div>
+
+            {/* RIGHT SIDE: RESEND LINK */}
+            <button
+              type='button'
+              onClick={handleResendOtp}
+              className={`font-semibold transition-colors ${
+                timer > 0
+                  ? "text-gray-300 cursor-not-allowed hidden"
+                  : "text-blue-600 hover:text-blue-700"
+              } ${timer > 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              disabled={timer > 0 || sending}
+            >
+              Resend OTP
+            </button>
           </div>
         </div>
       </PopupModal>
