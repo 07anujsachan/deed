@@ -13,9 +13,9 @@ export default function StudentForm({ form, setForm }) {
       education: [
         ...education,
         {
-          level: "",
-          field: "",
-          college: "",
+          educationLevel: "",
+          fieldOfStudy: "",
+          institution: "",
           from: "",
           to: "",
         },
@@ -29,16 +29,15 @@ export default function StudentForm({ form, setForm }) {
     setForm({ ...form, education: updated });
   };
 
-const updateEducation = (index, key, value) => {
-  const updated = education.map((item, i) =>
-    i === index
-      ? { ...item, [key]: value } // ✅ new object
-      : item
-  );
+  const updateEducation = (index, key, value) => {
+    const updated = education.map((item, i) =>
+      i === index
+        ? { ...item, [key]: value } // ✅ new object
+        : item
+    );
 
-  setForm({ ...form, education: updated });
-};
-
+    setForm({ ...form, education: updated });
+  };
 
   return (
     <div className='space-y-8'>
@@ -64,8 +63,10 @@ const updateEducation = (index, key, value) => {
           {/* EDUCATION LEVEL */}
           <SelectField
             placeholder='Select education level'
-            value={edu.level}
-            onChange={(e) => updateEducation(index, "level", e.target.value)}
+            value={edu.educationLevel}
+            onChange={(e) =>
+              updateEducation(index, "educationLevel", e.target.value)
+            }
             options={[
               { label: "High School", value: "high_school" },
               { label: "Diploma", value: "diploma" },
@@ -78,15 +79,19 @@ const updateEducation = (index, key, value) => {
           {/* FIELD */}
           <Input
             placeholder='Enter discipline / field of study'
-            value={edu.field}
-            onChange={(e) => updateEducation(index, "field", e.target.value)}
+            value={edu.fieldOfStudy}
+            onChange={(e) =>
+              updateEducation(index, "fieldOfStudy", e.target.value)
+            }
           />
 
           {/* COLLEGE */}
           <Input
             placeholder='Enter college name here'
-            value={edu.college}
-            onChange={(e) => updateEducation(index, "college", e.target.value)}
+            value={edu.institution}
+            onChange={(e) =>
+              updateEducation(index, "institution", e.target.value)
+            }
           />
 
           {/* FROM - TO */}
@@ -124,7 +129,7 @@ const updateEducation = (index, key, value) => {
 function yearOptions(type) {
   const currentYear = new Date().getFullYear();
   const years = [];
-  if(type === "from") {
+  if (type === "from") {
     for (let i = currentYear; i >= 1980; i--) {
       years.push({ label: String(i), value: String(i) });
     }

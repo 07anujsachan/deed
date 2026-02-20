@@ -18,9 +18,9 @@ export default function Step3() {
   const storedFormData = useSelector((state) => state.mentor.formData);
 
   const [form, setForm] = useState({
-    subjects: storedFormData?.subjects || [],
-    sessionFrequency: storedFormData?.sessionFrequency || "",
-    mentorshipMode: storedFormData?.mentorshipMode || "",
+    topics: storedFormData?.topics || [],
+    availability: storedFormData?.availability || "",
+    mode: storedFormData?.mode || "",
     languages: storedFormData?.languages || [],
     otherLanguages: storedFormData?.otherLanguages || "",
   });
@@ -70,8 +70,8 @@ export default function Step3() {
             "Arts / Humanities",
             "Media / Journalism / Communication",
           ]}
-          value={form.subjects}
-          onChange={(subjects) => setForm({ ...form, subjects })}
+          value={form.topics}
+          onChange={(topics) => setForm({ ...form, topics })}
           otherPlaceholder='Enter subject or career path'
         />
       </Section>
@@ -88,8 +88,8 @@ export default function Step3() {
             <CheckboxOption
               key={item}
               label={item}
-              checked={form.sessionFrequency === item}
-              onChange={() => setForm({ ...form, sessionFrequency: item })}
+              checked={form.availability === item}
+              onChange={() => setForm({ ...form, availability: item })}
               isRadio={true}
             />
           ))}
@@ -104,8 +104,8 @@ export default function Step3() {
               <CheckboxOption
                 key={item}
                 label={item}
-                checked={form.mentorshipMode === item}
-                onChange={() => setForm({ ...form, mentorshipMode: item })}
+                checked={form.mode === item}
+                onChange={() => setForm({ ...form, mode: item })}
                 isRadio={true}
               />
             )
